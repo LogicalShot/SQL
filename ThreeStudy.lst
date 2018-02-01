@@ -1,0 +1,641 @@
+HR@orcl> desc employee
+ERROR:
+ORA-04043: object employee does not exist 
+
+
+HR@orcl> desc employees
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ EMPLOYEE_ID                                                                         NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                   VARCHAR2(20)
+ LAST_NAME                                                                           NOT NULL VARCHAR2(25)
+ EMAIL                                                                               NOT NULL VARCHAR2(25)
+ PHONE_NUMBER                                                                                 VARCHAR2(20)
+ HIRE_DATE                                                                           NOT NULL DATE
+ JOB_ID                                                                              NOT NULL VARCHAR2(10)
+ SALARY                                                                                       NUMBER(8,2)
+ COMMISSION_PCT                                                                               NUMBER(2,2)
+ MANAGER_ID                                                                                   NUMBER(6)
+ DEPARTMENT_ID                                                                                NUMBER(4)
+
+HR@orcl> SELECT employee_id, RPAD(last_name, 15, '*'),
+  2             LPAD(last_name, 15, '*')
+  3  FROM employee
+  4  ;
+FROM employee
+     *
+ERROR at line 3:
+ORA-00942: table or view does not exist 
+
+
+HR@orcl> /
+FROM employee
+     *
+ERROR at line 3:
+ORA-00942: table or view does not exist 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, RPAD(last_name, 15, '*'),
+  2             LPAD(last_name, 15, '*')
+  3* FROM employees
+  4  /
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        174 Abel***********                                              ***********Abel                                                              
+        166 Ande***********                                              ***********Ande                                                              
+        130 Atkinson*******                                              *******Atkinson                                                              
+        105 Austin*********                                              *********Austin                                                              
+        204 Baer***********                                              ***********Baer                                                              
+        116 Baida**********                                              **********Baida                                                              
+        167 Banda**********                                              **********Banda                                                              
+        172 Bates**********                                              **********Bates                                                              
+        192 Bell***********                                              ***********Bell                                                              
+        151 Bernstein******                                              ******Bernstein                                                              
+        129 Bissot*********                                              *********Bissot                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        169 Bloom**********                                              **********Bloom                                                              
+        185 Bull***********                                              ***********Bull                                                              
+        187 Cabrio*********                                              *********Cabrio                                                              
+        148 Cambrault******                                              ******Cambrault                                                              
+        154 Cambrault******                                              ******Cambrault                                                              
+        110 Chen***********                                              ***********Chen                                                              
+        188 Chung**********                                              **********Chung                                                              
+        119 Colmenares*****                                              *****Colmenares                                                              
+        142 Davies*********                                              *********Davies                                                              
+        102 De Haan********                                              ********De Haan                                                              
+        186 Dellinger******                                              ******Dellinger                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        189 Dilly**********                                              **********Dilly                                                              
+        160 Doran**********                                              **********Doran                                                              
+        104 Ernst**********                                              **********Ernst                                                              
+        147 Errazuriz******                                              ******Errazuriz                                                              
+        193 Everett********                                              ********Everett                                                              
+        109 Faviet*********                                              *********Faviet                                                              
+        202 Fay************                                              ************Fay                                                              
+        197 Feeney*********                                              *********Feeney                                                              
+        181 Fleaur*********                                              *********Fleaur                                                              
+        170 Fox************                                              ************Fox                                                              
+        121 Fripp**********                                              **********Fripp                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        190 Gates**********                                              **********Gates                                                              
+        135 Gee************                                              ************Gee                                                              
+        183 Geoni**********                                              **********Geoni                                                              
+        206 Gietz**********                                              **********Gietz                                                              
+        199 Grant**********                                              **********Grant                                                              
+        178 Grant**********                                              **********Grant                                                              
+        108 Greenberg******                                              ******Greenberg                                                              
+        163 Greene*********                                              *********Greene                                                              
+        152 Hall***********                                              ***********Hall                                                              
+        201 Hartstein******                                              ******Hartstein                                                              
+        205 Higgins********                                              ********Higgins                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        118 Himuro*********                                              *********Himuro                                                              
+        103 Hunold*********                                              *********Hunold                                                              
+        175 Hutton*********                                              *********Hutton                                                              
+        179 Johnson********                                              ********Johnson                                                              
+        195 Jones**********                                              **********Jones                                                              
+        122 Kaufling*******                                              *******Kaufling                                                              
+        115 Khoo***********                                              ***********Khoo                                                              
+        156 King***********                                              ***********King                                                              
+        100 King***********                                              ***********King                                                              
+        101 Kochhar********                                              ********Kochhar                                                              
+        173 Kumar**********                                              **********Kumar                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        137 Ladwig*********                                              *********Ladwig                                                              
+        127 Landry*********                                              *********Landry                                                              
+        165 Lee************                                              ************Lee                                                              
+        177 Livingston*****                                              *****Livingston                                                              
+        107 Lorentz********                                              ********Lorentz                                                              
+        133 Mallin*********                                              *********Mallin                                                              
+        128 Markle*********                                              *********Markle                                                              
+        131 Marlow*********                                              *********Marlow                                                              
+        164 Marvins********                                              ********Marvins                                                              
+        143 Matos**********                                              **********Matos                                                              
+        203 Mavris*********                                              *********Mavris                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        194 McCain*********                                              *********McCain                                                              
+        158 McEwen*********                                              *********McEwen                                                              
+        126 Mikkilineni****                                              ****Mikkilineni                                                              
+        124 Mourgos********                                              ********Mourgos                                                              
+        125 Nayer**********                                              **********Nayer                                                              
+        198 OConnell*******                                              *******OConnell                                                              
+        153 Olsen**********                                              **********Olsen                                                              
+        132 Olson**********                                              **********Olson                                                              
+        168 Ozer***********                                              ***********Ozer                                                              
+        146 Partners*******                                              *******Partners                                                              
+        106 Pataballa******                                              ******Pataballa                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        140 Patel**********                                              **********Patel                                                              
+        191 Perkins********                                              ********Perkins                                                              
+        136 Philtanker*****                                              *****Philtanker                                                              
+        113 Popp***********                                              ***********Popp                                                              
+        141 Rajs***********                                              ***********Rajs                                                              
+        114 Raphaely*******                                              *******Raphaely                                                              
+        134 Rogers*********                                              *********Rogers                                                              
+        145 Russell********                                              ********Russell                                                              
+        184 Sarchand*******                                              *******Sarchand                                                              
+        111 Sciarra********                                              ********Sciarra                                                              
+        139 Seo************                                              ************Seo                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        161 Sewall*********                                              *********Sewall                                                              
+        159 Smith**********                                              **********Smith                                                              
+        171 Smith**********                                              **********Smith                                                              
+        138 Stiles*********                                              *********Stiles                                                              
+        182 Sullivan*******                                              *******Sullivan                                                              
+        157 Sully**********                                              **********Sully                                                              
+        176 Taylor*********                                              *********Taylor                                                              
+        180 Taylor*********                                              *********Taylor                                                              
+        117 Tobias*********                                              *********Tobias                                                              
+        150 Tucker*********                                              *********Tucker                                                              
+        155 Tuvault********                                              ********Tuvault                                                              
+
+EMPLOYEE_ID RPAD(LAST_NAME,15,'*')                                       LPAD(LAST_NAME,15,'*')                                                       
+----------- ------------------------------------------------------------ ------------------------------------------------------------                 
+        112 Urman**********                                              **********Urman                                                              
+        144 Vargas*********                                              *********Vargas                                                              
+        162 Vishney********                                              ********Vishney                                                              
+        123 Vollman********                                              ********Vollman                                                              
+        196 Walsh**********                                              **********Walsh                                                              
+        120 Weiss**********                                              **********Weiss                                                              
+        200 Whalen*********                                              *********Whalen                                                              
+        149 Zlotkey********                                              ********Zlotkey                                                              
+
+107 rows selected.
+
+HR@orcl> select sysdate from dual;
+
+SYSDATE                                                                                                                                               
+---------                                                                                                                                             
+23-JAN-18                                                                                                                                             
+
+HR@orcl> select to_char(sysdate,'yyyy/mm/dd hh24:mi:ss') today
+  2  from dual;
+
+TODAY                                                                                                                                                 
+-------------------                                                                                                                                   
+2018/01/23 12:32:00                                                                                                                                   
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/MON/dd hh24:mi:ss') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+-----------------------------                                                                                                                         
+2018/JAN/23 12:33:30                                                                                                                                  
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyysp/MON/dd hh24:mi:ss') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+-------------------------------------------------------------------                                                                                   
+two thousand eighteen/JAN/23 12:33:56                                                                                                                 
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss am') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+----------------------                                                                                                                                
+2018/01/23 12:35:03 pm                                                                                                                                
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss am') today
+  2* from dual
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss Day') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+--------------------------------------------------------                                                                                              
+2018/01/23 12:35:55 Tuesday                                                                                                                           
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss Dy') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+--------------------------------                                                                                                                      
+2018/01/23 12:36:10 Tue                                                                                                                               
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss w') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+---------------------                                                                                                                                 
+2018/01/23 12:36:41 4                                                                                                                                 
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss Dy w') today
+  2* from dual
+HR@orcl> 
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+----------------------------------                                                                                                                    
+2018/01/23 12:37:00 Tue 4                                                                                                                             
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss Dy ww') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+-----------------------------------                                                                                                                   
+2018/01/23 12:38:52 Tue 04                                                                                                                            
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select to_char(sysdate,'yyyy/mm/dd hh:mi:ss Dy q') today
+  2* from dual
+HR@orcl> /
+
+TODAY                                                                                                                                                 
+----------------------------------                                                                                                                    
+2018/01/23 12:39:13 Tue 1                                                                                                                             
+
+HR@orcl> SELECT employee_id, TH_CHAR(hire_date, 'yyyy/mm/dd hh24:mi:ss') hired
+  2  FROM employees
+  3  WHERE department_id = 60;
+SELECT employee_id, TH_CHAR(hire_date, 'yyyy/mm/dd hh24:mi:ss') hired
+                    *
+ERROR at line 1:
+ORA-00904: "TH_CHAR": invalid identifier 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(hire_date, 'yyyy/mm/dd hh24:mi:ss') hired
+  2  FROM employees
+  3* WHERE department_id = 60
+HR@orcl> /
+
+EMPLOYEE_ID HIRED                                                                                                                                     
+----------- -------------------                                                                                                                       
+        103 2006/01/03 00:00:00                                                                                                                       
+        104 2007/05/21 00:00:00                                                                                                                       
+        105 2005/06/25 00:00:00                                                                                                                       
+        106 2006/02/05 00:00:00                                                                                                                       
+        107 2007/02/07 00:00:00                                                                                                                       
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id,hire_date,  TO_CHAR(hire_date, 'mm') hired
+  2  FROM employees
+  3* WHERE department_id = 60
+HR@orcl> /
+
+EMPLOYEE_ID HIRE_DATE HI                                                                                                                              
+----------- --------- --                                                                                                                              
+        103 03-JAN-06 01                                                                                                                              
+        104 21-MAY-07 05                                                                                                                              
+        105 25-JUN-05 06                                                                                                                              
+        106 05-FEB-06 02                                                                                                                              
+        107 07-FEB-07 02                                                                                                                              
+
+HR@orcl> SELECT employee_id, salary
+  2  FROM employees
+  3  WHERE department_id = 80;
+
+EMPLOYEE_ID     SALARY                                                                                                                                
+----------- ----------                                                                                                                                
+        145      14000                                                                                                                                
+        146      13500                                                                                                                                
+        147      12000                                                                                                                                
+        148      11000                                                                                                                                
+        149      10500                                                                                                                                
+        150      10000                                                                                                                                
+        151       9500                                                                                                                                
+        152       9000                                                                                                                                
+        153       8000                                                                                                                                
+        154       7500                                                                                                                                
+        155       7000                                                                                                                                
+
+EMPLOYEE_ID     SALARY                                                                                                                                
+----------- ----------                                                                                                                                
+        156      10000                                                                                                                                
+        157       9500                                                                                                                                
+        158       9000                                                                                                                                
+        159       8000                                                                                                                                
+        160       7500                                                                                                                                
+        161       7000                                                                                                                                
+        162      10500                                                                                                                                
+        163       9500                                                                                                                                
+        164       7200                                                                                                                                
+        165       6800                                                                                                                                
+        166       6400                                                                                                                                
+
+EMPLOYEE_ID     SALARY                                                                                                                                
+----------- ----------                                                                                                                                
+        167       6200                                                                                                                                
+        168      11500                                                                                                                                
+        169      10000                                                                                                                                
+        170       9600                                                                                                                                
+        171       7400                                                                                                                                
+        172       7300                                                                                                                                
+        173       6100                                                                                                                                
+        174      11000                                                                                                                                
+        175       8800                                                                                                                                
+        176       8600                                                                                                                                
+        177       8400                                                                                                                                
+
+EMPLOYEE_ID     SALARY                                                                                                                                
+----------- ----------                                                                                                                                
+        179       6200                                                                                                                                
+
+34 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'$999,999')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> /
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        145   $14,000                                                                                                                                 
+        146   $13,500                                                                                                                                 
+        147   $12,000                                                                                                                                 
+        148   $11,000                                                                                                                                 
+        149   $10,500                                                                                                                                 
+        150   $10,000                                                                                                                                 
+        151    $9,500                                                                                                                                 
+        152    $9,000                                                                                                                                 
+        153    $8,000                                                                                                                                 
+        154    $7,500                                                                                                                                 
+        155    $7,000                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        156   $10,000                                                                                                                                 
+        157    $9,500                                                                                                                                 
+        158    $9,000                                                                                                                                 
+        159    $8,000                                                                                                                                 
+        160    $7,500                                                                                                                                 
+        161    $7,000                                                                                                                                 
+        162   $10,500                                                                                                                                 
+        163    $9,500                                                                                                                                 
+        164    $7,200                                                                                                                                 
+        165    $6,800                                                                                                                                 
+        166    $6,400                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        167    $6,200                                                                                                                                 
+        168   $11,500                                                                                                                                 
+        169   $10,000                                                                                                                                 
+        170    $9,600                                                                                                                                 
+        171    $7,400                                                                                                                                 
+        172    $7,300                                                                                                                                 
+        173    $6,100                                                                                                                                 
+        174   $11,000                                                                                                                                 
+        175    $8,800                                                                                                                                 
+        176    $8,600                                                                                                                                 
+        177    $8,400                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        179    $6,200                                                                                                                                 
+
+34 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'$099,999')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> /
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        145  $014,000                                                                                                                                 
+        146  $013,500                                                                                                                                 
+        147  $012,000                                                                                                                                 
+        148  $011,000                                                                                                                                 
+        149  $010,500                                                                                                                                 
+        150  $010,000                                                                                                                                 
+        151  $009,500                                                                                                                                 
+        152  $009,000                                                                                                                                 
+        153  $008,000                                                                                                                                 
+        154  $007,500                                                                                                                                 
+        155  $007,000                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        156  $010,000                                                                                                                                 
+        157  $009,500                                                                                                                                 
+        158  $009,000                                                                                                                                 
+        159  $008,000                                                                                                                                 
+        160  $007,500                                                                                                                                 
+        161  $007,000                                                                                                                                 
+        162  $010,500                                                                                                                                 
+        163  $009,500                                                                                                                                 
+        164  $007,200                                                                                                                                 
+        165  $006,800                                                                                                                                 
+        166  $006,400                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        167  $006,200                                                                                                                                 
+        168  $011,500                                                                                                                                 
+        169  $010,000                                                                                                                                 
+        170  $009,600                                                                                                                                 
+        171  $007,400                                                                                                                                 
+        172  $007,300                                                                                                                                 
+        173  $006,100                                                                                                                                 
+        174  $011,000                                                                                                                                 
+        175  $008,800                                                                                                                                 
+        176  $008,600                                                                                                                                 
+        177  $008,400                                                                                                                                 
+
+EMPLOYEE_ID TO_CHAR(S                                                                                                                                 
+----------- ---------                                                                                                                                 
+        179  $006,200                                                                                                                                 
+
+34 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'L099,999')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> /
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L0                                                                                                                        
+----------- ------------------                                                                                                                        
+        145           $014,000                                                                                                                        
+        146           $013,500                                                                                                                        
+        147           $012,000                                                                                                                        
+        148           $011,000                                                                                                                        
+        149           $010,500                                                                                                                        
+        150           $010,000                                                                                                                        
+        151           $009,500                                                                                                                        
+        152           $009,000                                                                                                                        
+        153           $008,000                                                                                                                        
+        154           $007,500                                                                                                                        
+        155           $007,000                                                                                                                        
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L0                                                                                                                        
+----------- ------------------                                                                                                                        
+        156           $010,000                                                                                                                        
+        157           $009,500                                                                                                                        
+        158           $009,000                                                                                                                        
+        159           $008,000                                                                                                                        
+        160           $007,500                                                                                                                        
+        161           $007,000                                                                                                                        
+        162           $010,500                                                                                                                        
+        163           $009,500                                                                                                                        
+        164           $007,200                                                                                                                        
+        165           $006,800                                                                                                                        
+        166           $006,400                                                                                                                        
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L0                                                                                                                        
+----------- ------------------                                                                                                                        
+        167           $006,200                                                                                                                        
+        168           $011,500                                                                                                                        
+        169           $010,000                                                                                                                        
+        170           $009,600                                                                                                                        
+        171           $007,400                                                                                                                        
+        172           $007,300                                                                                                                        
+        173           $006,100                                                                                                                        
+        174           $011,000                                                                                                                        
+        175           $008,800                                                                                                                        
+        176           $008,600                                                                                                                        
+        177           $008,400                                                                                                                        
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L0                                                                                                                        
+----------- ------------------                                                                                                                        
+        179           $006,200                                                                                                                        
+
+34 rows selected.
+
+HR@orcl> L is local money text, We are setting america so view $
+SP2-0224: invalid starting line number
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'L099,999.99')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> /
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L099,                                                                                                                     
+----------- ---------------------                                                                                                                     
+        145           $014,000.00                                                                                                                     
+        146           $013,500.00                                                                                                                     
+        147           $012,000.00                                                                                                                     
+        148           $011,000.00                                                                                                                     
+        149           $010,500.00                                                                                                                     
+        150           $010,000.00                                                                                                                     
+        151           $009,500.00                                                                                                                     
+        152           $009,000.00                                                                                                                     
+        153           $008,000.00                                                                                                                     
+        154           $007,500.00                                                                                                                     
+        155           $007,000.00                                                                                                                     
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L099,                                                                                                                     
+----------- ---------------------                                                                                                                     
+        156           $010,000.00                                                                                                                     
+        157           $009,500.00                                                                                                                     
+        158           $009,000.00                                                                                                                     
+        159           $008,000.00                                                                                                                     
+        160           $007,500.00                                                                                                                     
+        161           $007,000.00                                                                                                                     
+        162           $010,500.00                                                                                                                     
+        163           $009,500.00                                                                                                                     
+        164           $007,200.00                                                                                                                     
+        165           $006,800.00                                                                                                                     
+        166           $006,400.00                                                                                                                     
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L099,                                                                                                                     
+----------- ---------------------                                                                                                                     
+        167           $006,200.00                                                                                                                     
+        168           $011,500.00                                                                                                                     
+        169           $010,000.00                                                                                                                     
+        170           $009,600.00                                                                                                                     
+        171           $007,400.00                                                                                                                     
+        172           $007,300.00                                                                                                                     
+        173           $006,100.00                                                                                                                     
+        174           $011,000.00                                                                                                                     
+        175           $008,800.00                                                                                                                     
+        176           $008,600.00                                                                                                                     
+        177           $008,400.00                                                                                                                     
+
+EMPLOYEE_ID TO_CHAR(SALARY,'L099,                                                                                                                     
+----------- ---------------------                                                                                                                     
+        179           $006,200.00                                                                                                                     
+
+34 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'L099.999,99')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> /
+SELECT employee_id, TO_CHAR(salary,'L099.999,99')
+                                   *
+ERROR at line 1:
+ORA-01481: invalid number format model 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, TO_CHAR(salary,'L999,999.99')
+  2  FROM employees
+  3* WHERE department_id = 80
+HR@orcl> spool off
