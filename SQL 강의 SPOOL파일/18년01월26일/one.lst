@@ -1,0 +1,630 @@
+[oracle@localhost ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Fri Jan 26 09:18:11 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SYS@orcl> startup
+ORACLE instance started.
+
+Total System Global Area  422670336 bytes
+Fixed Size                  1336960 bytes
+Variable Size             301992320 bytes
+Database Buffers          113246208 bytes
+Redo Buffers                6094848 bytes
+Database mounted.
+Database opened.
+SYS@orcl> conn hr/hr
+Connected.
+HR@orcl> CREATE TABLE orders
+  2  (order_id number(4) primary key, 
+  3  prod_id varchar2(10) not null, 
+  4  amount number(2),
+  5  cust_id number(4) constraint ord_custid_fk foreign key 
+  6                    refereces customer(id));^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^[[D^Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+[oracle@localhost ~]$ sqlplus hr/hr
+
+SQL*Plus: Release 11.2.0.1.0 Production on Fri Jan 26 09:22:37 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+
+HR@orcl> ed
+SP2-0107: Nothing to save.
+HR@orcl> CREATE TABLE orders
+  2  (order_id number (4) primary key,
+  3  prod_id varchar2 (10) not null,
+  4  amount number (2),
+  5  cust_id number (4),
+  6  constraint ord_custid_fk foreign key(cust_id)
+  7             references customoer(id));
+           references customoer(id))
+                      *
+ERROR at line 7:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  CREATE TABLE orders
+  2  (order_id number (4) primary key,
+  3  prod_id varchar2 (10) not null,
+  4  amount number (2),
+  5  cust_id number (4),
+  6  constraint ord_custid_fk foreign key(cust_id)
+  7*            references customer(id))
+HR@orcl> /
+           references customer(id))
+                      *
+ERROR at line 7:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> CREATE TABLE customer
+  2  (id number(4) primary key,
+  3  name varchar2(20) not null,
+  4  gender char(1) not null);
+
+Table created.
+
+HR@orcl> CREATE TABLE orders
+  2  (order_id number(4) primary key,
+  3  prod_id varchar2(10) not null,
+  4  amount number(2),
+  5  cust_id number(4),
+  6  constraint ord_custid_fk foreign key(cust_id)
+  7             references customer(id));
+
+Table created.
+
+HR@orcl> INSERT INTO customer
+  2  VALUES(&id,INITCAP('&name'), UPPER('&gender'));
+Enter value for id: 2345
+Enter value for name: david
+Enter value for gender: m
+old   2: VALUES(&id,INITCAP('&name'), UPPER('&gender'))
+new   2: VALUES(2345,INITCAP('david'), UPPER('m'))
+
+1 row created.
+
+HR@orcl> /
+Enter value for id: 4567
+Enter value for name: janet
+Enter value for gender: f
+old   2: VALUES(&id,INITCAP('&name'), UPPER('&gender'))
+new   2: VALUES(4567,INITCAP('janet'), UPPER('f'))
+
+1 row created.
+
+HR@orcl> /
+Enter value for id: 6789
+Enter value for name: henry
+Enter value for gender: m
+old   2: VALUES(&id,INITCAP('&name'), UPPER('&gender'))
+new   2: VALUES(6789,INITCAP('henry'), UPPER('m'))
+
+1 row created.
+
+HR@orcl> commit;
+
+Commit complete.
+
+HR@orcl> 
+HR@orcl> set sqlp "HR1> "
+HR1> desc orders
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ORDER_ID                                  NOT NULL NUMBER(4)
+ PROD_ID                                   NOT NULL VARCHAR2(10)
+ AMOUNT                                             NUMBER(2)
+ CUST_ID                                            NUMBER(4)
+
+HR1> INSERT INTO orders
+  2  VALUES(1001, 'T987', 3, 2345);
+
+1 row created.
+
+HR1> INSERT INTO orders
+  2  VALUES(1002, 'W654', 2, 6789);
+
+1 row created.
+
+HR1> INSERT INTO orders
+  2  VALUES(1003, '0432', 10, 3423);
+INSERT INTO orders
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (HR.ORD_CUSTID_FK) violated - parent key not 
+found 
+
+
+HR1> commit;
+
+Commit complete.
+
+HR1> SELECT * FROM orders;
+
+  ORDER_ID PROD_ID        AMOUNT    CUST_ID                                     
+---------- ---------- ---------- ----------                                     
+      1001 T987                3       2345                                     
+      1002 W654                2       6789                                     
+
+HR1> SELECT * FROM customer;
+
+        ID NAME                 G                                               
+---------- -------------------- -                                               
+      2345 David                M                                               
+      4567 Janet                F                                               
+      6789 Henry                M                                               
+
+HR1> delete from customer
+  2  where id = 4567;
+
+1 row deleted.
+
+HR1> delete from customer
+  2  where id = 2345;
+delete from customer
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (HR.ORD_CUSTID_FK) violated - child record 
+found 
+
+
+HR1> update orders
+  2  set cust_id = null
+  3  where cust_id = 2345;
+
+1 row updated.
+
+HR1> commit
+  2  ;
+
+Commit complete.
+
+HR1> delete from customer
+  2  where id - 2345;
+where id - 2345
+              *
+ERROR at line 2:
+ORA-00920: invalid relational operator 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  delete from customer
+  2* where id = 2345
+HR1> /
+
+1 row deleted.
+
+HR1> CREATE TABLE dept80
+  2  AS
+  3  SELECT employee_id emp_id, last_name, salary*12, hire_date
+  4  FROM employees
+  5  WHERE department_id = 80;
+SELECT employee_id emp_id, last_name, salary*12, hire_date
+                                            *
+ERROR at line 3:
+ORA-00998: must name this expression with a column alias 
+
+
+HR1> Ed
+Wrote file afiedt.buf
+
+  1  CREATE TABLE dept80
+  2  AS
+  3  SELECT employee_id emp_id, last_name, salary*12 annsal, hire_date
+  4  FROM employees
+  5* WHERE department_id = 80
+HR1> /
+
+Table created.
+
+HR1> SELECT * FROM dept80;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE                       
+---------- ------------------------- ---------- ---------                       
+       149 Zlotkey                       126000 29-JAN-00                       
+       174 Abel                          132000 11-MAY-96                       
+       176 Taylor                        103200 24-MAR-98                       
+
+HR1> DESC dept80
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_ID                                             NUMBER(6)
+ LAST_NAME                                 NOT NULL VARCHAR2(25)
+ ANNSAL                                             NUMBER
+ HIRE_DATE                                 NOT NULL DATE
+
+HR1> CREATE VIEW dept80_vu
+  2  AS employee_id emp_id, last_name, salary*12 annsal, hire_date
+  3  FROM employees
+  4  WHERE department_id = 80;
+AS employee_id emp_id, last_name, salary*12 annsal, hire_date
+   *
+ERROR at line 2:
+ORA-00928: missing SELECT keyword 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  CREATE VIEW dept80_vu
+  2  AS SELECT employee_id emp_id, last_name, salary*12 annsal, hire_date
+  3  FROM employees
+  4* WHERE department_id = 80
+HR1> /
+CREATE VIEW dept80_vu
+            *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+HR1> /
+
+View created.
+
+HR1> desc dept80_vu
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_ID                                    NOT NULL NUMBER(6)
+ LAST_NAME                                 NOT NULL VARCHAR2(25)
+ ANNSAL                                             NUMBER
+ HIRE_DATE                                 NOT NULL DATE
+
+HR1> SELECT * FROM dept80_vu;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE                       
+---------- ------------------------- ---------- ---------                       
+       149 Zlotkey                       126000 29-JAN-00                       
+       174 Abel                          132000 11-MAY-96                       
+       176 Taylor                        103200 24-MAR-98                       
+
+HR1> SELECT * FROM dept80;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE                       
+---------- ------------------------- ---------- ---------                       
+       149 Zlotkey                       126000 29-JAN-00                       
+       174 Abel                          132000 11-MAY-96                       
+       176 Taylor                        103200 24-MAR-98                       
+
+HR1> update employees
+  2  SET salary = salary*1.1
+  3  WHERE department_id = 80;
+
+3 rows updated.
+
+HR1> commit
+  2  ;
+
+Commit complete.
+
+HR1> UPDATE dept80_vu
+  2  SET hire_date='24-MAY-98'
+  3  WHERE employee_id = 176;
+WHERE employee_id = 176
+      *
+ERROR at line 3:
+ORA-00904: "EMPLOYEE_ID": invalid identifier 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  UPDATE dept80_vu
+  2  SET hire_date='24-MAY-98'
+  3* WHERE emp_id = 176
+HR1> /
+
+1 row updated.
+
+HR1> SELECT employee_id, last_name, hire_date
+  2  FROM employees
+  3  WHERE employee_id = 176;
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ---------                                 
+        176 Taylor                    24-MAY-98                                 
+
+HR1> desc user_views
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ VIEW_NAME                                 NOT NULL VARCHAR2(30)
+ TEXT_LENGTH                                        NUMBER
+ TEXT                                               LONG
+ TYPE_TEXT_LENGTH                                   NUMBER
+ TYPE_TEXT                                          VARCHAR2(4000)
+ OID_TEXT_LENGTH                                    NUMBER
+ OID_TEXT                                           VARCHAR2(4000)
+ VIEW_TYPE_OWNER                                    VARCHAR2(30)
+ VIEW_TYPE                                          VARCHAR2(30)
+ SUPERVIEW_NAME                                     VARCHAR2(30)
+ EDITIONING_VIEW                                    VARCHAR2(1)
+ READ_ONLY                                          VARCHAR2(1)
+
+HR1> SELECT view_name, text FROM user_views;
+
+VIEW_NAME                                                                       
+------------------------------                                                  
+TEXT                                                                            
+--------------------------------------------------------------------------------
+DEPT80_VU                                                                       
+SELECT employee_id emp_id, last_name, salary*12 annsal, hire_date               
+FROM employees                                                                  
+WHERE department_id = 80                                                        
+                                                                                
+
+HR1> CREATE OR REPLACE VIEW dept80_vu
+  2  AS employee_id emp_id, last_name, salary*12 annsal, hire_date, department_id
+  3  FROM employees
+  4  WHERE department_id = 80;
+AS employee_id emp_id, last_name, salary*12 annsal, hire_date, department_id
+   *
+ERROR at line 2:
+ORA-00928: missing SELECT keyword 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE VIEW dept80_vu
+  2  AS SELECT employee_id emp_id, last_name, salary*12 annsal, hire_date, department_id
+  3  FROM employees
+  4* WHERE department_id = 80
+HR1> /
+
+View created.
+
+HR1> select * from dept80_vu;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE DEPARTMENT_ID         
+---------- ------------------------- ---------- --------- -------------         
+       149 Zlotkey                       138600 29-JAN-00            80         
+       174 Abel                          145200 11-MAY-96            80         
+       176 Taylor                        113520 24-MAY-98            80         
+
+HR1> SELECT e.emp_id, e.last_name, e.annsal, e.department_id, e.department_name
+  2  FROM dept80_vu e JOIN departments d
+  3  ON (e.department_id = d.department_id);
+SELECT e.emp_id, e.last_name, e.annsal, e.department_id, e.department_name
+                                                         *
+ERROR at line 1:
+ORA-00904: "E"."DEPARTMENT_NAME": invalid identifier 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT e.emp_id, e.last_name, e.annsal, e.department_id, d.department_name
+  2  FROM dept80_vu e JOIN departments d
+  3* ON (e.department_id = d.department_id)
+HR1> /
+
+    EMP_ID LAST_NAME                     ANNSAL DEPARTMENT_ID                   
+---------- ------------------------- ---------- -------------                   
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+       149 Zlotkey                       138600            80                   
+Sales                                                                           
+                                                                                
+       174 Abel                          145200            80                   
+Sales                                                                           
+                                                                                
+       176 Taylor                        113520            80                   
+Sales                                                                           
+                                                                                
+
+HR1> show linesize
+linesize 80
+HR1> set linesize 150
+HR1> /
+
+    EMP_ID LAST_NAME                     ANNSAL DEPARTMENT_ID DEPARTMENT_NAME                                                                         
+---------- ------------------------- ---------- ------------- ------------------------------                                                          
+       149 Zlotkey                       138600            80 Sales                                                                                   
+       174 Abel                          145200            80 Sales                                                                                   
+       176 Taylor                        113520            80 Sales                                                                                   
+
+HR1> set linesize 180
+HR1> /
+
+    EMP_ID LAST_NAME                     ANNSAL DEPARTMENT_ID DEPARTMENT_NAME                                                                                                       
+---------- ------------------------- ---------- ------------- ------------------------------                                                                                        
+       149 Zlotkey                       138600            80 Sales                                                                                                                 
+       174 Abel                          145200            80 Sales                                                                                                                 
+       176 Taylor                        113520            80 Sales                                                                                                                 
+
+HR1> SELECT d.department_name, MIN(e.salary), MAX(e.salary), AVG(e.salary)
+  2  FROM employees e JOIN departments d
+  3  ON (e.department_id = d.department_id)
+  4  GROUP BY d.department_name;
+
+DEPARTMENT_NAME                MIN(E.SALARY) MAX(E.SALARY) AVG(E.SALARY)                                                                                                            
+------------------------------ ------------- ------------- -------------                                                                                                            
+Administration                          4400          4400          4400                                                                                                            
+Accounting                              8300         12000    10766.6667                                                                                                            
+IT                                      4200         11000          8240                                                                                                            
+Executive                              17000         24000    19333.3333                                                                                                            
+Shipping                                2500          5800          3500                                                                                                            
+Sales                                   9460         12100    11036.6667                                                                                                            
+Marketing                               6600          6600          6600                                                                                                            
+Deptname                               14300         14300         14300                                                                                                            
+
+8 rows selected.
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  CREATE VIEW dept_sum_vu(deptname, minsal, maxsal, avgsal)
+  2  AS
+  3  SELECT d.department_name, MIN(e.salary), MAX(e.salary), AVG(e.salary)
+  4  FROM employees e JOIN departments d
+  5  ON (e.department_id = d.department_id)
+  6* GROUP BY d.department_name
+HR1> /
+
+View created.
+
+HR1> SELECT * FROM dept_sum_vu;
+
+DEPTNAME                           MINSAL     MAXSAL     AVGSAL                                                                                                                     
+------------------------------ ---------- ---------- ----------                                                                                                                     
+Administration                       4400       4400       4400                                                                                                                     
+Accounting                           8300      12000 10766.6667                                                                                                                     
+IT                                   4200      11000       8240                                                                                                                     
+Executive                           17000      24000 19333.3333                                                                                                                     
+Shipping                             2500       5800       3500                                                                                                                     
+Sales                                9460      12100 11036.6667                                                                                                                     
+Marketing                            6600       6600       6600                                                                                                                     
+Deptname                            14300      14300      14300                                                                                                                     
+
+8 rows selected.
+
+HR1> update employees
+  2  set salary = salary*1.05;
+
+23 rows updated.
+
+HR1> commit
+  2  ;
+
+Commit complete.
+
+HR1> SELECT * FROM dept_sum_vu;
+
+DEPTNAME                           MINSAL     MAXSAL     AVGSAL                                                                                                                     
+------------------------------ ---------- ---------- ----------                                                                                                                     
+Administration                       4620       4620       4620                                                                                                                     
+Accounting                           8715      12600      11305                                                                                                                     
+IT                                   4410      11550       8652                                                                                                                     
+Executive                           17850      25200      20300                                                                                                                     
+Shipping                             2625       6090       3675                                                                                                                     
+Sales                                9933      12705    11588.5                                                                                                                     
+Marketing                            6930       6930       6930                                                                                                                     
+Deptname                            15015      15015      15015                                                                                                                     
+
+8 rows selected.
+
+HR1>  CREATE OR REPLACE VIEW empvu20
+  2  AS SELECT *
+  3  FROM employees
+  4  WHERE department_id = 20
+  5  WITH CHECK OPTION CONSTRAINT empvu20_ck;
+
+View created.
+
+HR1> SELECT * FROM empvu20
+  2  ;
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID   
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ---------- -------------- ---------- -------------   
+        202 Pat                  Fay                       PFAY                      603.123.6666         17-AUG-97 MK_REP           6930                       201            20   
+
+HR1> update empvu20
+  2  set department_id = 50
+  3  WHERE employee_id = 202;
+update empvu20
+       *
+ERROR at line 1:
+ORA-01402: view WITH CHECK OPTION where-clause violation 
+
+
+HR1> SELECT MAX(department_id) FROM departments;
+
+MAX(DEPARTMENT_ID)                                                                                                                                                                  
+------------------                                                                                                                                                                  
+               190                                                                                                                                                                  
+
+HR1> CREATE SEQUENCE dept_id_seq
+  2  INCREMENT BY 10
+  3  START WITH 200
+  4  NOCACHE;
+
+Sequence created.
+
+HR1> INSERT INTO departments
+  2  VALUES(dept_id_seq.nextval, 'Support', null, 2500);
+
+1 row created.
+
+HR1> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                 
+------------- ------------------------------ ---------- -----------                                                                                                                 
+           30 Purchasing                                                                                                                                                            
+          100 Finance                                                                                                                                                               
+           40 Deptname                                         2500                                                                                                                 
+           10 Administration                        200        1700                                                                                                                 
+           20 Marketing                             201        1800                                                                                                                 
+          200 Support                                          2500                                                                                                                 
+           50 Shipping                              124        1500                                                                                                                 
+           60 IT                                    103        1400                                                                                                                 
+           80 Sales                                 149        2500                                                                                                                 
+           90 Executive                             100        1700                                                                                                                 
+          110 Accounting                            205        1700                                                                                                                 
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                 
+------------- ------------------------------ ---------- -----------                                                                                                                 
+          190 Contracting                                      1700                                                                                                                 
+           70 Public Relations                      100        1700                                                                                                                 
+
+13 rows selected.
+
+HR1> SELECT dept_id_seq.currval FROM dual;
+
+   CURRVAL                                                                                                                                                                          
+----------                                                                                                                                                                          
+       200                                                                                                                                                                          
+
+HR1> INSERT INTO departments
+  2  VALUES(dept_id_seq.nextval, 'CS', null,null);
+
+1 row created.
+
+HR1> rollback;
+
+Rollback complete.
+
+HR1> SELECT * FROM dept80;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE                                                                                                                           
+---------- ------------------------- ---------- ---------                                                                                                                           
+       149 Zlotkey                       126000 29-JAN-00                                                                                                                           
+       174 Abel                          132000 11-MAY-96                                                                                                                           
+       176 Taylor                        103200 24-MAR-98                                                                                                                           
+
+HR1> desc dept80;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ EMP_ID                                                                                                         NUMBER(6)
+ LAST_NAME                                                                                             NOT NULL VARCHAR2(25)
+ ANNSAL                                                                                                         NUMBER
+ HIRE_DATE                                                                                             NOT NULL DATE
+
+HR1> INSERT INTO dept80
+  2  VALUES(dept_id_seq.nextval, 'Jason', null, sysdate);
+
+1 row created.
+
+HR1> SELECT * FROM dept80;
+
+    EMP_ID LAST_NAME                     ANNSAL HIRE_DATE                                                                                                                           
+---------- ------------------------- ---------- ---------                                                                                                                           
+       149 Zlotkey                       126000 29-JAN-00                                                                                                                           
+       174 Abel                          132000 11-MAY-96                                                                                                                           
+       176 Taylor                        103200 24-MAR-98                                                                                                                           
+       220 Jason                                26-JAN-18                                                                                                                           
+
+HR1> spool off

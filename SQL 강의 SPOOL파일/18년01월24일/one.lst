@@ -1,0 +1,833 @@
+HR@orcl> SELECT department_id, SUM(salary) FROM employees dual;
+SELECT department_id, SUM(salary) FROM employees dual
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* SELECT department_id, SUM(salary) FROM employees dual
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, SUM(salary)
+  2  FROM employees
+  3* GROUP BY department_id
+HR@orcl> /
+
+DEPARTMENT_ID SUM(SALARY)                                                       
+------------- -----------                                                       
+          100       51608                                                       
+           30       24900                                                       
+                     7000                                                       
+           20       19000                                                       
+           70       10000                                                       
+           90       58000                                                       
+          110       20308                                                       
+           50      156400                                                       
+           40        6500                                                       
+           80      304500                                                       
+           10        4400                                                       
+
+DEPARTMENT_ID SUM(SALARY)                                                       
+------------- -----------                                                       
+           60       28800                                                       
+
+12 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, SUM(salary)
+  2  FROM employees
+  3  GROUP BY department_id
+  4* ORDER BY 1
+HR@orcl> /
+
+DEPARTMENT_ID SUM(SALARY)                                                       
+------------- -----------                                                       
+           10        4400                                                       
+           20       19000                                                       
+           30       24900                                                       
+           40        6500                                                       
+           50      156400                                                       
+           60       28800                                                       
+           70       10000                                                       
+           80      304500                                                       
+           90       58000                                                       
+          100       51608                                                       
+          110       20308                                                       
+
+DEPARTMENT_ID SUM(SALARY)                                                       
+------------- -----------                                                       
+                     7000                                                       
+
+12 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, job_id, SUM(salary)
+  2  FROM employees
+  3  GROUP BY department_id, job_id
+  4* ORDER BY 1,2
+HR@orcl> /
+
+DEPARTMENT_ID JOB_ID     SUM(SALARY)                                            
+------------- ---------- -----------                                            
+           10 AD_ASST           4400                                            
+           20 MK_MAN           13000                                            
+           20 MK_REP            6000                                            
+           30 PU_CLERK         13900                                            
+           30 PU_MAN           11000                                            
+           40 HR_REP            6500                                            
+           50 SH_CLERK         64300                                            
+           50 ST_CLERK         55700                                            
+           50 ST_MAN           36400                                            
+           60 IT_PROG          28800                                            
+           70 PR_REP           10000                                            
+
+DEPARTMENT_ID JOB_ID     SUM(SALARY)                                            
+------------- ---------- -----------                                            
+           80 SA_MAN           61000                                            
+           80 SA_REP          243500                                            
+           90 AD_PRES          24000                                            
+           90 AD_VP            34000                                            
+          100 FI_ACCOUNT       39600                                            
+          100 FI_MGR           12008                                            
+          110 AC_ACCOUNT        8300                                            
+          110 AC_MGR           12008                                            
+              SA_REP            7000                                            
+
+20 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, job_id, SUM(salary)
+  2  FROM employees
+  3  WHERE department_id > 50
+  4  GROUP BY department_id, job_id
+  5* ORDER BY 1,2
+HR@orcl> /
+
+DEPARTMENT_ID JOB_ID     SUM(SALARY)                                            
+------------- ---------- -----------                                            
+           60 IT_PROG          28800                                            
+           70 PR_REP           10000                                            
+           80 SA_MAN           61000                                            
+           80 SA_REP          243500                                            
+           90 AD_PRES          24000                                            
+           90 AD_VP            34000                                            
+          100 FI_ACCOUNT       39600                                            
+          100 FI_MGR           12008                                            
+          110 AC_ACCOUNT        8300                                            
+          110 AC_MGR           12008                                            
+
+10 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, job_id, SUM(salary)
+  2  FROM employees
+  3  WHERE SUM(salary) > 20000
+  4  GROUP BY department_id, job_id
+  5* ORDER BY 1,2
+HR@orcl> /
+WHERE SUM(salary) > 20000
+      *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, job_id, SUM(salary)
+  2  FROM employees
+  3  GROUP BY department_id, job_id
+  4  WHERE SUM(salary) > 20000
+  5* ORDER BY 1,2
+HR@orcl> /
+WHERE SUM(salary) > 20000
+*
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT department_id, job_id, SUM(salary)
+  2  FROM employees
+  3  GROUP BY department_id, job_id
+  4  HAVING SUM(salary) > 20000
+  5* ORDER BY 1,2
+HR@orcl> /
+
+DEPARTMENT_ID JOB_ID     SUM(SALARY)                                            
+------------- ---------- -----------                                            
+           50 SH_CLERK         64300                                            
+           50 ST_CLERK         55700                                            
+           50 ST_MAN           36400                                            
+           60 IT_PROG          28800                                            
+           80 SA_MAN           61000                                            
+           80 SA_REP          243500                                            
+           90 AD_PRES          24000                                            
+           90 AD_VP            34000                                            
+          100 FI_ACCOUNT       39600                                            
+
+9 rows selected.
+
+HR@orcl> need Restricting Group Results with the HAVING Clause"
+SP2-0734: unknown command beginning "need Restr..." - rest of line ignored.
+HR@orcl> SELECT employee_id, last_name, department_id
+  2  FROM employees;
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        198 OConnell                             50                             
+        199 Grant                                50                             
+        200 Whalen                               10                             
+        201 Hartstein                            20                             
+        202 Fay                                  20                             
+        203 Mavris                               40                             
+        204 Baer                                 70                             
+        205 Higgins                             110                             
+        206 Gietz                               110                             
+        100 King                                 90                             
+        101 Kochhar                              90                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        102 De Haan                              90                             
+        103 Hunold                               60                             
+        104 Ernst                                60                             
+        105 Austin                               60                             
+        106 Pataballa                            60                             
+        107 Lorentz                              60                             
+        108 Greenberg                           100                             
+        109 Faviet                              100                             
+        110 Chen                                100                             
+        111 Sciarra                             100                             
+        112 Urman                               100                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        113 Popp                                100                             
+        114 Raphaely                             30                             
+        115 Khoo                                 30                             
+        116 Baida                                30                             
+        117 Tobias                               30                             
+        118 Himuro                               30                             
+        119 Colmenares                           30                             
+        120 Weiss                                50                             
+        121 Fripp                                50                             
+        122 Kaufling                             50                             
+        123 Vollman                              50                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        124 Mourgos                              50                             
+        125 Nayer                                50                             
+        126 Mikkilineni                          50                             
+        127 Landry                               50                             
+        128 Markle                               50                             
+        129 Bissot                               50                             
+        130 Atkinson                             50                             
+        131 Marlow                               50                             
+        132 Olson                                50                             
+        133 Mallin                               50                             
+        134 Rogers                               50                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        135 Gee                                  50                             
+        136 Philtanker                           50                             
+        137 Ladwig                               50                             
+        138 Stiles                               50                             
+        139 Seo                                  50                             
+        140 Patel                                50                             
+        141 Rajs                                 50                             
+        142 Davies                               50                             
+        143 Matos                                50                             
+        144 Vargas                               50                             
+        145 Russell                              80                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        146 Partners                             80                             
+        147 Errazuriz                            80                             
+        148 Cambrault                            80                             
+        149 Zlotkey                              80                             
+        150 Tucker                               80                             
+        151 Bernstein                            80                             
+        152 Hall                                 80                             
+        153 Olsen                                80                             
+        154 Cambrault                            80                             
+        155 Tuvault                              80                             
+        156 King                                 80                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        157 Sully                                80                             
+        158 McEwen                               80                             
+        159 Smith                                80                             
+        160 Doran                                80                             
+        161 Sewall                               80                             
+        162 Vishney                              80                             
+        163 Greene                               80                             
+        164 Marvins                              80                             
+        165 Lee                                  80                             
+        166 Ande                                 80                             
+        167 Banda                                80                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        168 Ozer                                 80                             
+        169 Bloom                                80                             
+        170 Fox                                  80                             
+        171 Smith                                80                             
+        172 Bates                                80                             
+        173 Kumar                                80                             
+        174 Abel                                 80                             
+        175 Hutton                               80                             
+        176 Taylor                               80                             
+        177 Livingston                           80                             
+        178 Grant                                                               
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        179 Johnson                              80                             
+        180 Taylor                               50                             
+        181 Fleaur                               50                             
+        182 Sullivan                             50                             
+        183 Geoni                                50                             
+        184 Sarchand                             50                             
+        185 Bull                                 50                             
+        186 Dellinger                            50                             
+        187 Cabrio                               50                             
+        188 Chung                                50                             
+        189 Dilly                                50                             
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        190 Gates                                50                             
+        191 Perkins                              50                             
+        192 Bell                                 50                             
+        193 Everett                              50                             
+        194 McCain                               50                             
+        195 Jones                                50                             
+        196 Walsh                                50                             
+        197 Feeney                               50                             
+
+107 rows selected.
+
+HR@orcl> SELECT Employee_id, last_name, department_id, department_name
+  2  FROM employees JOIN departments
+  3  USING (department_id);
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        200 Whalen                               10                             
+Administration                                                                  
+                                                                                
+        201 Hartstein                            20                             
+Marketing                                                                       
+                                                                                
+        202 Fay                                  20                             
+Marketing                                                                       
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        114 Raphaely                             30                             
+Purchasing                                                                      
+                                                                                
+        119 Colmenares                           30                             
+Purchasing                                                                      
+                                                                                
+        115 Khoo                                 30                             
+Purchasing                                                                      
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        116 Baida                                30                             
+Purchasing                                                                      
+                                                                                
+        117 Tobias                               30                             
+Purchasing                                                                      
+                                                                                
+        118 Himuro                               30                             
+Purchasing                                                                      
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        203 Mavris                               40                             
+Human Resources                                                                 
+                                                                                
+        198 OConnell                             50                             
+Shipping                                                                        
+                                                                                
+        199 Grant                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        120 Weiss                                50                             
+Shipping                                                                        
+                                                                                
+        121 Fripp                                50                             
+Shipping                                                                        
+                                                                                
+        122 Kaufling                             50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        123 Vollman                              50                             
+Shipping                                                                        
+                                                                                
+        124 Mourgos                              50                             
+Shipping                                                                        
+                                                                                
+        125 Nayer                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        126 Mikkilineni                          50                             
+Shipping                                                                        
+                                                                                
+        127 Landry                               50                             
+Shipping                                                                        
+                                                                                
+        128 Markle                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        129 Bissot                               50                             
+Shipping                                                                        
+                                                                                
+        130 Atkinson                             50                             
+Shipping                                                                        
+                                                                                
+        131 Marlow                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        132 Olson                                50                             
+Shipping                                                                        
+                                                                                
+        133 Mallin                               50                             
+Shipping                                                                        
+                                                                                
+        134 Rogers                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        135 Gee                                  50                             
+Shipping                                                                        
+                                                                                
+        136 Philtanker                           50                             
+Shipping                                                                        
+                                                                                
+        137 Ladwig                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        138 Stiles                               50                             
+Shipping                                                                        
+                                                                                
+        139 Seo                                  50                             
+Shipping                                                                        
+                                                                                
+        140 Patel                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        141 Rajs                                 50                             
+Shipping                                                                        
+                                                                                
+        142 Davies                               50                             
+Shipping                                                                        
+                                                                                
+        143 Matos                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        144 Vargas                               50                             
+Shipping                                                                        
+                                                                                
+        180 Taylor                               50                             
+Shipping                                                                        
+                                                                                
+        181 Fleaur                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        182 Sullivan                             50                             
+Shipping                                                                        
+                                                                                
+        183 Geoni                                50                             
+Shipping                                                                        
+                                                                                
+        184 Sarchand                             50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        185 Bull                                 50                             
+Shipping                                                                        
+                                                                                
+        186 Dellinger                            50                             
+Shipping                                                                        
+                                                                                
+        187 Cabrio                               50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        188 Chung                                50                             
+Shipping                                                                        
+                                                                                
+        189 Dilly                                50                             
+Shipping                                                                        
+                                                                                
+        190 Gates                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        191 Perkins                              50                             
+Shipping                                                                        
+                                                                                
+        192 Bell                                 50                             
+Shipping                                                                        
+                                                                                
+        193 Everett                              50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        194 McCain                               50                             
+Shipping                                                                        
+                                                                                
+        195 Jones                                50                             
+Shipping                                                                        
+                                                                                
+        196 Walsh                                50                             
+Shipping                                                                        
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        197 Feeney                               50                             
+Shipping                                                                        
+                                                                                
+        104 Ernst                                60                             
+IT                                                                              
+                                                                                
+        103 Hunold                               60                             
+IT                                                                              
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        107 Lorentz                              60                             
+IT                                                                              
+                                                                                
+        106 Pataballa                            60                             
+IT                                                                              
+                                                                                
+        105 Austin                               60                             
+IT                                                                              
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        204 Baer                                 70                             
+Public Relations                                                                
+                                                                                
+        176 Taylor                               80                             
+Sales                                                                           
+                                                                                
+        177 Livingston                           80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        179 Johnson                              80                             
+Sales                                                                           
+                                                                                
+        175 Hutton                               80                             
+Sales                                                                           
+                                                                                
+        174 Abel                                 80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        173 Kumar                                80                             
+Sales                                                                           
+                                                                                
+        172 Bates                                80                             
+Sales                                                                           
+                                                                                
+        171 Smith                                80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        170 Fox                                  80                             
+Sales                                                                           
+                                                                                
+        169 Bloom                                80                             
+Sales                                                                           
+                                                                                
+        168 Ozer                                 80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        145 Russell                              80                             
+Sales                                                                           
+                                                                                
+        146 Partners                             80                             
+Sales                                                                           
+                                                                                
+        147 Errazuriz                            80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        148 Cambrault                            80                             
+Sales                                                                           
+                                                                                
+        149 Zlotkey                              80                             
+Sales                                                                           
+                                                                                
+        150 Tucker                               80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        151 Bernstein                            80                             
+Sales                                                                           
+                                                                                
+        152 Hall                                 80                             
+Sales                                                                           
+                                                                                
+        153 Olsen                                80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        154 Cambrault                            80                             
+Sales                                                                           
+                                                                                
+        155 Tuvault                              80                             
+Sales                                                                           
+                                                                                
+        156 King                                 80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        157 Sully                                80                             
+Sales                                                                           
+                                                                                
+        158 McEwen                               80                             
+Sales                                                                           
+                                                                                
+        159 Smith                                80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        160 Doran                                80                             
+Sales                                                                           
+                                                                                
+        161 Sewall                               80                             
+Sales                                                                           
+                                                                                
+        162 Vishney                              80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        163 Greene                               80                             
+Sales                                                                           
+                                                                                
+        164 Marvins                              80                             
+Sales                                                                           
+                                                                                
+        165 Lee                                  80                             
+Sales                                                                           
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        166 Ande                                 80                             
+Sales                                                                           
+                                                                                
+        167 Banda                                80                             
+Sales                                                                           
+                                                                                
+        101 Kochhar                              90                             
+Executive                                                                       
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        100 King                                 90                             
+Executive                                                                       
+                                                                                
+        102 De Haan                              90                             
+Executive                                                                       
+                                                                                
+        110 Chen                                100                             
+Finance                                                                         
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        108 Greenberg                           100                             
+Finance                                                                         
+                                                                                
+        111 Sciarra                             100                             
+Finance                                                                         
+                                                                                
+        112 Urman                               100                             
+Finance                                                                         
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        113 Popp                                100                             
+Finance                                                                         
+                                                                                
+        109 Faviet                              100                             
+Finance                                                                         
+                                                                                
+        206 Gietz                               110                             
+Accounting                                                                      
+                                                                                
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+DEPARTMENT_NAME                                                                 
+------------------------------                                                  
+        205 Higgins                             110                             
+Accounting                                                                      
+                                                                                
+
+106 rows selected.
+
+HR@orcl> spool off

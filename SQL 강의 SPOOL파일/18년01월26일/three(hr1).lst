@@ -1,0 +1,387 @@
+HR1> desc_user_indexes
+ERROR:
+ORA-00911: invalid character 
+ORA-00911: invalid character 
+
+
+HR1> desc user_indexes
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ INDEX_NAME                                NOT NULL VARCHAR2(30)
+ INDEX_TYPE                                         VARCHAR2(27)
+ TABLE_OWNER                               NOT NULL VARCHAR2(30)
+ TABLE_NAME                                NOT NULL VARCHAR2(30)
+ TABLE_TYPE                                         VARCHAR2(11)
+ UNIQUENESS                                         VARCHAR2(9)
+ COMPRESSION                                        VARCHAR2(8)
+ PREFIX_LENGTH                                      NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ INI_TRANS                                          NUMBER
+ MAX_TRANS                                          NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                                        NUMBER
+ MAX_EXTENTS                                        NUMBER
+ PCT_INCREASE                                       NUMBER
+ PCT_THRESHOLD                                      NUMBER
+ INCLUDE_COLUMN                                     NUMBER
+ FREELISTS                                          NUMBER
+ FREELIST_GROUPS                                    NUMBER
+ PCT_FREE                                           NUMBER
+ LOGGING                                            VARCHAR2(3)
+ BLEVEL                                             NUMBER
+ LEAF_BLOCKS                                        NUMBER
+ DISTINCT_KEYS                                      NUMBER
+ AVG_LEAF_BLOCKS_PER_KEY                            NUMBER
+ AVG_DATA_BLOCKS_PER_KEY                            NUMBER
+ CLUSTERING_FACTOR                                  NUMBER
+ STATUS                                             VARCHAR2(8)
+ NUM_ROWS                                           NUMBER
+ SAMPLE_SIZE                                        NUMBER
+ LAST_ANALYZED                                      DATE
+ DEGREE                                             VARCHAR2(40)
+ INSTANCES                                          VARCHAR2(40)
+ PARTITIONED                                        VARCHAR2(3)
+ TEMPORARY                                          VARCHAR2(1)
+ GENERATED                                          VARCHAR2(1)
+ SECONDARY                                          VARCHAR2(1)
+ BUFFER_POOL                                        VARCHAR2(7)
+ FLASH_CACHE                                        VARCHAR2(7)
+ CELL_FLASH_CACHE                                   VARCHAR2(7)
+ USER_STATS                                         VARCHAR2(3)
+ DURATION                                           VARCHAR2(15)
+ PCT_DIRECT_ACCESS                                  NUMBER
+ ITYP_OWNER                                         VARCHAR2(30)
+ ITYP_NAME                                          VARCHAR2(30)
+ PARAMETERS                                         VARCHAR2(1000)
+ GLOBAL_STATS                                       VARCHAR2(3)
+ DOMIDX_STATUS                                      VARCHAR2(12)
+ DOMIDX_OPSTATUS                                    VARCHAR2(6)
+ FUNCIDX_STATUS                                     VARCHAR2(8)
+ JOIN_INDEX                                         VARCHAR2(3)
+ IOT_REDUNDANT_PKEY_ELIM                            VARCHAR2(3)
+ DROPPED                                            VARCHAR2(3)
+ VISIBILITY                                         VARCHAR2(9)
+ DOMIDX_MANAGEMENT                                  VARCHAR2(14)
+ SEGMENT_CREATED                                    VARCHAR2(3)
+
+HR1> SELECT table_name, index_name, uniqueness;
+SELECT table_name, index_name, uniqueness
+                                        *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, index_name, uniqueness
+  2  FROM user_indexes
+  3* order by 1,2;2;
+HR1> :wq
+SP2-0042: unknown command ":wq" - rest of line ignored.
+HR1> /
+order by 1,2;2;
+            *
+ERROR at line 3:
+ORA-00911: invalid character 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, index_name, uniqueness
+  2  FROM user_indexes
+  3* order by 1,2;
+HR1> /
+order by 1,2;
+            *
+ERROR at line 3:
+ORA-00911: invalid character 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, index_name, uniqueness
+  2  FROM user_indexes
+  3* ORDER BY 1, 2;
+HR1> /
+ORDER BY 1, 2;
+             *
+ERROR at line 3:
+ORA-00911: invalid character 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, index_name, uniqueness
+  2  FROM user_indexes
+  3* ORDER BY 1,2 ;
+HR1> /
+ORDER BY 1,2 ;
+             *
+ERROR at line 3:
+ORA-00911: invalid character 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, index_name, uniqueness
+  2  FROM user_indexes
+  3* ORDER BY 1,2
+HR1> /
+
+TABLE_NAME                     INDEX_NAME                     UNIQUENES         
+------------------------------ ------------------------------ ---------         
+COUNTRIES                      COUNTRY_C_ID_PK                UNIQUE            
+CUSTOMER                       SYS_C0011083                   UNIQUE            
+DEPARTMENTS                    DEPT_ID_PK                     UNIQUE            
+DEPARTMENTS                    DEPT_LOCATION_IX               NONUNIQUE         
+EMPLOYEES                      EMP_DEPARTMENT_IX              NONUNIQUE         
+EMPLOYEES                      EMP_EMAIL_UK                   UNIQUE            
+EMPLOYEES                      EMP_EMP_ID_PK                  UNIQUE            
+EMPLOYEES                      EMP_JOB_IX                     NONUNIQUE         
+EMPLOYEES                      EMP_MANAGER_IX                 NONUNIQUE         
+EMPLOYEES                      EMP_NAME_IX                    NONUNIQUE         
+JOBS                           JOB_ID_PK                      UNIQUE            
+
+TABLE_NAME                     INDEX_NAME                     UNIQUENES         
+------------------------------ ------------------------------ ---------         
+JOB_HISTORY                    JHIST_DEPARTMENT_IX            NONUNIQUE         
+JOB_HISTORY                    JHIST_EMPLOYEE_IX              NONUNIQUE         
+JOB_HISTORY                    JHIST_EMP_ID_ST_DATE_PK        UNIQUE            
+JOB_HISTORY                    JHIST_JOB_IX                   NONUNIQUE         
+LOCATIONS                      LOC_CITY_IX                    NONUNIQUE         
+LOCATIONS                      LOC_COUNTRY_IX                 NONUNIQUE         
+LOCATIONS                      LOC_ID_PK                      UNIQUE            
+LOCATIONS                      LOC_STATE_PROVINCE_IX          NONUNIQUE         
+ORDERS                         SYS_C0011085                   UNIQUE            
+REGIONS                        REG_ID_PK                      UNIQUE            
+
+21 rows selected.
+
+HR1> how to know index used in DB = bottom
+SP2-0734: unknown command beginning "how to kno..." - rest of line ignored.
+HR1> conn hr/hr
+Connected.
+HR@orcl> set autotrace traceonly
+HR@orcl> SELECT * FROM employees
+  2  WHERE employee_id = 178;
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 1833546154                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+| Id  | Operation                   | Name          | Rows  | Bytes | Cost (%CPU
+)| Time     |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+|   0 | SELECT STATEMENT            |               |     1 |   133 |     0   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMPLOYEES     |     1 |   133 |     0   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|*  2 |   INDEX UNIQUE SCAN         | EMP_EMP_ID_PK |     1 |       |     0   (0
+)| 00:00:01 |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   2 - access("EMPLOYEE_ID"=178)                                                
+
+
+Statistics
+----------------------------------------------------------                      
+          8  recursive calls                                                    
+          0  db block gets                                                      
+          4  consistent gets                                                    
+          1  physical reads                                                     
+          0  redo size                                                          
+       1036  bytes sent via SQL*Net to client                                   
+        408  bytes received via SQL*Net from client                             
+          1  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          1  rows processed                                                     
+
+HR@orcl> 
+HR@orcl>   2  WHERE employee_id = 178;
+HR@orcl> 
+HR@orcl> SELECT * FROM employees
+  2    2  WHERE employee_id = 178;
+  2  WHERE employee_id = 178
+  *
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT * FROM employees
+  2* WHERE employee_id = 178
+HR@orcl> /
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 1833546154                                                     
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+| Id  | Operation                   | Name          | Rows  | Bytes | Cost (%CPU
+)| Time     |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+|   0 | SELECT STATEMENT            |               |     1 |    69 |     1   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMPLOYEES     |     1 |    69 |     1   (0
+)| 00:00:01 |                                                                   
+                                                                                
+|*  2 |   INDEX UNIQUE SCAN         | EMP_EMP_ID_PK |     1 |       |     0   (0
+)| 00:00:01 |                                                                   
+                                                                                
+--------------------------------------------------------------------------------
+-------------                                                                   
+                                                                                
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   2 - access("EMPLOYEE_ID"=178)                                                
+
+
+Statistics
+----------------------------------------------------------                      
+          0  recursive calls                                                    
+          0  db block gets                                                      
+          2  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+       1036  bytes sent via SQL*Net to client                                   
+        408  bytes received via SQL*Net from client                             
+          1  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          1  rows processed                                                     
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT * FROM employees
+  2* WHERE salary = 11000
+HR@orcl> /
+
+no rows selected
+
+
+Execution Plan
+----------------------------------------------------------                      
+Plan hash value: 1445457117                                                     
+                                                                                
+------------------------------------------------------------------------------- 
+| Id  | Operation         | Name      | Rows  | Bytes | Cost (%CPU)| Time     | 
+------------------------------------------------------------------------------- 
+|   0 | SELECT STATEMENT  |           |     1 |    69 |     3   (0)| 00:00:01 | 
+|*  1 |  TABLE ACCESS FULL| EMPLOYEES |     1 |    69 |     3   (0)| 00:00:01 | 
+------------------------------------------------------------------------------- 
+                                                                                
+Predicate Information (identified by operation id):                             
+---------------------------------------------------                             
+                                                                                
+   1 - filter("SALARY"=11000)                                                   
+
+
+Statistics
+----------------------------------------------------------                      
+          8  recursive calls                                                    
+          0  db block gets                                                      
+          9  consistent gets                                                    
+          0  physical reads                                                     
+          0  redo size                                                          
+        925  bytes sent via SQL*Net to client                                   
+        408  bytes received via SQL*Net from client                             
+          1  SQL*Net roundtrips to/from client                                  
+          0  sorts (memory)                                                     
+          0  sorts (disk)                                                       
+          0  rows processed                                                     
+
+HR@orcl> GRANT create synonym TO hr;
+GRANT create synonym TO hr
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+HR@orcl> spool off
+
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+[oracle@localhost ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Fri Jan 26 16:12:01 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+
+SYS@orcl> GRANT create synonym TO hr;
+
+Grant succeeded.
+
+SYS@orcl> CREATE USER demo 
+  2  IDENTIFIED BY demo;
+
+User created.
+
+SYS@orcl> conn demo/demo
+ERROR:
+ORA-01045: user DEMO lacks CREATE SESSION privilege; logon denied
+
+
+Warning: You are no longer connected to ORACLE.
+@> conn / as sysdba
+Connected.
+SYS@orcl> GRANT create session TO demo;
+
+Grant succeeded.
+
+SYS@orcl> conn demo/demo 
+Connected.
+DEMO@orcl> create table demotest
+  2  (id number);
+create table demotest
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+DEMO@orcl> SELECT * FROM session_privs;
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+

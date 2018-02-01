@@ -1,0 +1,29 @@
+[oracle@localhost ~]$ sqlplus hr/hr
+
+SQL*Plus: Release 11.2.0.1.0 Production on Fri Jan 26 09:39:52 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+
+HR@orcl> select * from customer
+  2  ;
+
+        ID NAME                 G
+---------- -------------------- -
+      2345 David                M
+      4567 Janet                F
+      6789 Henry                M
+
+HR@orcl> set sqlp "HR2> "
+HR2> spool one(hr2)
+
+update employees
+set salary = salary*1.05;
+
+commit
+HR2> spool off

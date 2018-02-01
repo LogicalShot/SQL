@@ -1,0 +1,5 @@
+SYS@orcl> GRANT create view TO hr;
+
+Grant succeeded.
+
+SYS@orcl> spool off

@@ -1,0 +1,249 @@
+SYS@orcl> @?/sqlplus/admin/plustrace
+SP2-0310: unable to open file "/u01/app/oracle/product/11.2.0/sqlplus/admin/plustrace.sql"
+SYS@orcl> @?/sqlplus/admin/plustrce
+SYS@orcl> 
+SYS@orcl> drop role plustrace;
+
+Role dropped.
+
+SYS@orcl> create role plustrace;
+
+Role created.
+
+SYS@orcl> 
+SYS@orcl> grant select on v_$sesstat to plustrace;
+
+Grant succeeded.
+
+SYS@orcl> grant select on v_$statname to plustrace;
+
+Grant succeeded.
+
+SYS@orcl> grant select on v_$mystat to plustrace;
+
+Grant succeeded.
+
+SYS@orcl> grant plustrace to dba with admin option;
+
+Grant succeeded.
+
+SYS@orcl> 
+SYS@orcl> set echo off
+SYS@orcl> grant plustrace to hr;
+
+Grant succeeded.
+
+SYS@orcl> conn hr/hr
+Connected.
+HR@orcl> SELECT table_name, num_rows FROM user_tables;
+
+TABLE_NAME                       NUM_ROWS                                       
+------------------------------ ----------                                       
+SALES_REPS                                                                      
+COUNTRIES                                                                       
+MY_EMPLOYEE                                                                     
+DEPT80                                                                          
+ORDERS                                                                          
+CUSTOMER                                                                        
+DEPT                                                                            
+JOB_GRADES                                                                      
+JOB_HISTORY                                                                     
+EMPLOYEES                                                                       
+JOBS                                                                            
+
+TABLE_NAME                       NUM_ROWS                                       
+------------------------------ ----------                                       
+DEPARTMENTS                                                                     
+LOCATIONS                                                                       
+REGIONS                                                                         
+
+14 rows selected.
+
+HR@orcl> exec dbms_stats.gather_schema_stats('HR');
+
+PL/SQL procedure successfully completed.
+
+HR@orcl> SELECT table_name, num_rows FROM user_tables;
+
+TABLE_NAME                       NUM_ROWS                                       
+------------------------------ ----------                                       
+SALES_REPS                              0                                       
+COUNTRIES                               4                                       
+MY_EMPLOYEE                             0                                       
+DEPT80                                  3                                       
+ORDERS                                  2                                       
+CUSTOMER                                1                                       
+DEPT                                    0                                       
+JOB_GRADES                              6                                       
+JOB_HISTORY                            10                                       
+EMPLOYEES                              23                                       
+JOBS                                   12                                       
+
+TABLE_NAME                       NUM_ROWS                                       
+------------------------------ ----------                                       
+DEPARTMENTS                            12                                       
+LOCATIONS                               5                                       
+REGIONS                                 4                                       
+
+14 rows selected.
+
+HR@orcl> create table bigemp
+  2  as
+  3  select * from employees;
+
+Table created.
+
+HR@orcl> insert into bigemp
+  2  select * from bigemp;
+
+23 rows created.
+
+HR@orcl> /
+
+46 rows created.
+
+HR@orcl> /
+
+92 rows created.
+
+HR@orcl> /
+
+184 rows created.
+
+HR@orcl> /
+
+368 rows created.
+
+HR@orcl> /
+
+736 rows created.
+
+HR@orcl> 
+HR@orcl> /
+
+1472 rows created.
+
+HR@orcl> /
+
+2944 rows created.
+
+HR@orcl> /
+
+5888 rows created.
+
+HR@orcl> /
+
+11776 rows created.
+
+HR@orcl> /
+
+23552 rows created.
+
+HR@orcl> /
+
+47104 rows created.
+
+HR@orcl> /
+
+94208 rows created.
+
+HR@orcl> /
+
+188416 rows created.
+
+HR@orcl> commit
+  2  select count(*) from bigemp;
+select count(*) from bigemp
+*
+ERROR at line 2:
+ORA-02185: a token other than WORK follows COMMIT 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* select count * from bigemp
+HR@orcl> /
+select count * from bigemp
+               *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* select count * from bigemp;
+HR@orcl> /
+select count * from bigemp;
+               *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* select from * count bigemp
+HR@orcl> /
+select from * count bigemp
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+HR@orcl> select max(employee_id), min(employee_id) from bigemp;
+
+MAX(EMPLOYEE_ID) MIN(EMPLOYEE_ID)                                               
+---------------- ----------------                                               
+             206              100                                               
+
+HR@orcl> update bigemp
+  2  set employee_id = rownum;
+
+376832 rows updated.
+
+HR@orcl> select count(*) from bigemp;
+
+  COUNT(*)                                                                      
+----------                                                                      
+    376832                                                                      
+
+HR@orcl> commit;
+
+Commit complete.
+
+HR@orcl> select max(employee_id), min(employee_id) from bigemp;
+
+MAX(EMPLOYEE_ID) MIN(EMPLOYEE_ID)                                               
+---------------- ----------------                                               
+          376832                1                                               
+
+HR@orcl> SELECT view_name FROM user_views;
+
+VIEW_NAME                                                                       
+------------------------------                                                  
+DEPT80_VU                                                                       
+DEPT_SUM_VU                                                                     
+EMPVU20                                                                         
+
+HR@orcl> create synonym dsum for dept_sum_vu;
+create synonym dsum for dept_sum_vu
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+HR@orcl> create synonym dsum for dept_sum_vu;
+
+Synonym created.
+
+HR@orcl> SELECT view_name FROM user_views;
+
+VIEW_NAME                                                                       
+------------------------------                                                  
+DEPT80_VU                                                                       
+DEPT_SUM_VU                                                                     
+EMPVU20                                                                         
+
+HR@orcl> spool four(hr1)

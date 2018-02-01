@@ -1,0 +1,569 @@
+DEMO@orcl> spool four(hr2)
+
+DEMO@orcl> create role g1
+  2  ;
+create role g1
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+DEMO@orcl> conn / as sysdba
+Connected.
+SYS@orcl> create role g1;
+
+Role created.
+
+SYS@orcl> grant create session, create table, create view, create sequence
+  2  to g1;
+
+Grant succeeded.
+
+SYS@orcl> grant g1 to demo;
+
+Grant succeeded.
+
+SYS@orcl> conn demo/demo
+Connected.
+DEMO@orcl> select * from session_privs;
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+CREATE TABLE
+CREATE VIEW
+CREATE SEQUENCE
+
+DEMO@orcl> conn / as sysdba
+Connected.
+SYS@orcl> create user insa identified by insa;
+
+User created.
+
+SYS@orcl> grant g1 to insa;
+
+Grant succeeded.
+
+SYS@orcl> conn insa/insa
+Connected.
+INSA@orcl> select * from session privs;
+select * from session privs
+              *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+INSA@orcl> ed
+Wrote file afiedt.buf
+
+  1* select * from session_privs
+INSA@orcl> /
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+CREATE TABLE
+CREATE VIEW
+CREATE SEQUENCE
+
+INSA@orcl> conn / as sysdba
+Connected.
+SYS@orcl> grant create synonym to g1;
+
+Grant succeeded.
+
+SYS@orcl> conn insa/insa
+Connected.
+INSA@orcl> select * from session_privs;
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+CREATE TABLE
+CREATE SYNONYM
+CREATE VIEW
+CREATE SEQUENCE
+
+INSA@orcl> conn demo/demo 
+Connected.
+DEMO@orcl> select * from session_privs;
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+CREATE TABLE
+CREATE SYNONYM
+CREATE VIEW
+CREATE SEQUENCE
+
+DEMO@orcl> select * from tab;
+
+no rows selected
+
+DEMO@orcl> select * from employees;
+select * from employees
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> /
+select * from employees
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> conn demo/demo
+Connected.
+DEMO@orcl> /
+select * from employees
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> ed
+Wrote file afiedt.buf
+
+  1* select * from hr.employees
+DEMO@orcl> /
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        200 Jennifer             Whalen
+JWHALEN                   515.123.4444         17-SEP-87 AD_ASST          4620
+                      101            10
+
+        201 Michael              Hartstein
+MHARTSTE                  515.123.5555         17-FEB-96 MK_MAN          15015
+                      100            40
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+
+        202 Pat                  Fay
+PFAY                      603.123.6666         17-AUG-97 MK_REP           6930
+                      201            20
+
+        205 Shelley              Higgins
+SHIGGINS                  515.123.8080         07-JUN-94 AC_MGR          12600
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+                      101           110
+
+        206 William              Gietz
+WGIETZ                    515.123.8181         07-JUN-94 AC_ACCOUNT       8715
+                      205           110
+
+        114 Den                  Raphealy
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+DRAPHEAL                  515.123.6789         02-MAR-99 SA_REP          11550
+            .2        100            60
+
+        115 James                Dean
+JDEAN                     515.123.6789         02-MAR-99 SA_REP          11550
+            .2        100            60
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        100 Steven               King
+SKING                     515.123.4567         17-JUN-87 AD_PRES         25200
+                                     90
+
+        101 Neena                Kochhar
+NKOCHHAR                  515.123.4568         21-SEP-89 AD_VP           17850
+                      100            90
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+
+        102 Lex                  De Haan
+LDEHAAN                   515.123.4569         13-JAN-93 AD_VP           17850
+                      100            90
+
+        103 Alexander            Hunold
+AHUNOLD                   590.423.4567         03-JAN-90 IT_PROG          9450
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+                      102            60
+
+        104 Bruce                Ernst
+BERNST                    590.423.4568         21-MAY-91 IT_PROG          6300
+                      103            60
+
+        113 Louis                Popp
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+LPOPP                     123.345.4567         25-JAN-18 AC_MGR          12600
+                      205           110
+
+        107 Diana                Lorentz
+DLORENTZ                  590.423.5567         07-FEB-99 IT_PROG          4410
+                      103            60
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        124 Kevin                Mourgos
+KMOURGOS                  650.123.5234         16-NOV-99 ST_MAN           6090
+                      100            50
+
+        141 Trenna               Rajs
+TRAJS                     650.121.8009         17-OCT-95 ST_CLERK         3675
+                      124            50
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+
+        142 Curtis               Davies
+CDAVIES                   650.121.2994         29-JAN-97 ST_CLERK         3255
+                      124            50
+
+        143 Randall              Matos
+RMATOS                    650.121.2874         15-MAR-98 ST_CLERK         2730
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+                      124            50
+
+        144 Peter                Vargas
+PVARGAS                   650.121.2004         09-JUL-98 ST_CLERK         2625
+                      124            50
+
+        149 Eleni                Zlotkey
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+EZLOTKEY                  011.44.1344.429018   29-JAN-00 SA_MAN        12127.5
+            .2        100            80
+
+        174 Ellen                Abel
+EABEL                     011.44.1644.429267   11-MAY-96 SA_REP          12705
+            .3        149            80
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        176 Jonathon             Taylor
+JTAYLOR                   011.44.1644.429265   24-MAY-98 SA_REP           9933
+            .2        149            80
+
+        178 Kimberely            Grant
+KGRANT                    011.44.1644.429263   24-MAY-99 SA_REP           7350
+           .15        149
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY
+------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+
+
+23 rows selected.
+
+DEMO@orcl> show linesize
+linesize 80
+DEMO@orcl> set lineszie 150
+SP2-0158: unknown SET option "lineszie"
+DEMO@orcl> set linesize 500
+DEMO@orcl> show linesize
+linesize 500
+DEMO@orcl> /
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        200 Jennifer             Whalen                    JWHALEN                   515.123.4444         17-SEP-87 AD_ASST          4620   101             10
+        201 Michael              Hartstein                 MHARTSTE                  515.123.5555         17-FEB-96 MK_MAN          15015   100             40
+        202 Pat                  Fay                       PFAY                      603.123.6666         17-AUG-97 MK_REP           6930   201             20
+        205 Shelley              Higgins                   SHIGGINS                  515.123.8080         07-JUN-94 AC_MGR          12600   101            110
+        206 William              Gietz                     WGIETZ                    515.123.8181         07-JUN-94 AC_ACCOUNT       8715   205            110
+        114 Den                  Raphealy                  DRAPHEAL                  515.123.6789         02-MAR-99 SA_REP          11550         .2 100            60
+        115 James                Dean                      JDEAN                     515.123.6789         02-MAR-99 SA_REP          11550         .2 100            60
+        100 Steven               King                      SKING                     515.123.4567         17-JUN-87 AD_PRES         25200          90
+        101 Neena                Kochhar                   NKOCHHAR                  515.123.4568         21-SEP-89 AD_VP           17850   100             90
+        102 Lex                  De Haan                   LDEHAAN                   515.123.4569         13-JAN-93 AD_VP           17850   100             90
+        103 Alexander            Hunold                    AHUNOLD                   590.423.4567         03-JAN-90 IT_PROG          9450   102             60
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        104 Bruce                Ernst                     BERNST                    590.423.4568         21-MAY-91 IT_PROG          6300   103             60
+        113 Louis                Popp                      LPOPP                     123.345.4567         25-JAN-18 AC_MGR          12600   205            110
+        107 Diana                Lorentz                   DLORENTZ                  590.423.5567         07-FEB-99 IT_PROG          4410   103             60
+        124 Kevin                Mourgos                   KMOURGOS                  650.123.5234         16-NOV-99 ST_MAN           6090   100             50
+        141 Trenna               Rajs                      TRAJS                     650.121.8009         17-OCT-95 ST_CLERK         3675   124             50
+        142 Curtis               Davies                    CDAVIES                   650.121.2994         29-JAN-97 ST_CLERK         3255   124             50
+        143 Randall              Matos                     RMATOS                    650.121.2874         15-MAR-98 ST_CLERK         2730   124             50
+        144 Peter                Vargas                    PVARGAS                   650.121.2004         09-JUL-98 ST_CLERK         2625   124             50
+        149 Eleni                Zlotkey                   EZLOTKEY                  011.44.1344.429018   29-JAN-00 SA_MAN        12127.5         .2 100            80
+        174 Ellen                Abel                      EABEL                     011.44.1644.429267   11-MAY-96 SA_REP          12705         .3 149            80
+        176 Jonathon             Taylor                    JTAYLOR                   011.44.1644.429265   24-MAY-98 SA_REP           9933         .2 149            80
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ---------- -------------- ---------- -------------
+        178 Kimberely            Grant                     KGRANT                    011.44.1644.429263   24-MAY-99 SA_REP           7350        .15 149
+
+23 rows selected.
+
+DEMO@orcl> update hr.employees
+  2  set salary = salary*1.2;
+update hr.employees
+          *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+DEMO@orcl> /
+update hr.employees
+          *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> select * from hr.employees
+
+DEMO@orcl> select * from hr.employees;
+select * from hr.employees
+                 *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> conn hr/hr
+Connected.
+HR@orcl> SELECT * from hr.emplist_vu;
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       200 Whalen                    JWHALEN                           10
+       201 Hartstein                 MHARTSTE                          40
+       202 Fay                       PFAY                              20
+       205 Higgins                   SHIGGINS                         110
+       206 Gietz                     WGIETZ                           110
+       114 Raphealy                  DRAPHEAL                          60
+       115 Dean                      JDEAN                             60
+       103 Hunold                    AHUNOLD                           60
+       104 Ernst                     BERNST                            60
+       113 Popp                      LPOPP                            110
+       107 Lorentz                   DLORENTZ                          60
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       124 Mourgos                   KMOURGOS                          50
+       141 Rajs                      TRAJS                             50
+       142 Davies                    CDAVIES                           50
+       143 Matos                     RMATOS                            50
+       144 Vargas                    PVARGAS                           50
+       149 Zlotkey                   EZLOTKEY                          80
+       174 Abel                      EABEL                             80
+       176 Taylor                    JTAYLOR                           80
+
+19 rows selected.
+
+HR@orcl> conn demo/demo
+Connected.
+DEMO@orcl> select * from hr.dept_sum_vu;
+
+DEPTNAME                           MINSAL     MAXSAL     AVGSAL
+------------------------------ ---------- ---------- ----------
+Administration                       4620       4620       4620
+Accounting                           8715      12600      11305
+IT                                   4410      11550       8652
+Executive                           17850      25200      20300
+Shipping                             2625       6090       3675
+Sales                                9933      12705    11588.5
+Marketing                            6930       6930       6930
+Deptname                            15015      15015      15015
+
+8 rows selected.
+
+DEMO@orcl> conn insa/insa
+Connected.
+INSA@orcl> /
+select * from hr.dept_sum_vu
+                 *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSA@orcl> select * from hr.emplist_vu;
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       200 Whalen                    JWHALEN                           10
+       201 Hartstein                 MHARTSTE                          40
+       202 Fay                       PFAY                              20
+       205 Higgins                   SHIGGINS                         110
+       206 Gietz                     WGIETZ                           110
+       114 Raphealy                  DRAPHEAL                          60
+       115 Dean                      JDEAN                             60
+       103 Hunold                    AHUNOLD                           60
+       104 Ernst                     BERNST                            60
+       113 Popp                      LPOPP                            110
+       107 Lorentz                   DLORENTZ                          60
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       124 Mourgos                   KMOURGOS                          50
+       141 Rajs                      TRAJS                             50
+       142 Davies                    CDAVIES                           50
+       143 Matos                     RMATOS                            50
+       144 Vargas                    PVARGAS                           50
+       149 Zlotkey                   EZLOTKEY                          80
+       174 Abel                      EABEL                             80
+       176 Taylor                    JTAYLOR                           80
+
+19 rows selected.
+
+INSA@orcl> create synonym e for hr.emplist_vu;
+
+Synonym created.
+
+INSA@orcl> select * from e;
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       200 Whalen                    JWHALEN                           10
+       201 Hartstein                 MHARTSTE                          40
+       202 Fay                       PFAY                              20
+       205 Higgins                   SHIGGINS                         110
+       206 Gietz                     WGIETZ                           110
+       114 Raphealy                  DRAPHEAL                          60
+       115 Dean                      JDEAN                             60
+       103 Hunold                    AHUNOLD                           60
+       104 Ernst                     BERNST                            60
+       113 Popp                      LPOPP                            110
+       107 Lorentz                   DLORENTZ                          60
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       124 Mourgos                   KMOURGOS                          50
+       141 Rajs                      TRAJS                             50
+       142 Davies                    CDAVIES                           50
+       143 Matos                     RMATOS                            50
+       144 Vargas                    PVARGAS                           50
+       149 Zlotkey                   EZLOTKEY                          80
+       174 Abel                      EABEL                             80
+       176 Taylor                    JTAYLOR                           80
+
+19 rows selected.
+
+INSA@orcl> conn demo/demo
+Connected.
+DEMO@orcl> create synonym emp for hr.emplist_vu;
+
+Synonym created.
+
+DEMO@orcl> select * from emp;
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       200 Whalen                    JWHALEN                           10
+       201 Hartstein                 MHARTSTE                          40
+       202 Fay                       PFAY                              20
+       205 Higgins                   SHIGGINS                         110
+       206 Gietz                     WGIETZ                           110
+       114 Raphealy                  DRAPHEAL                          60
+       115 Dean                      JDEAN                             60
+       103 Hunold                    AHUNOLD                           60
+       104 Ernst                     BERNST                            60
+       113 Popp                      LPOPP                            110
+       107 Lorentz                   DLORENTZ                          60
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID
+---------- ------------------------- ------------------------- ----------
+       124 Mourgos                   KMOURGOS                          50
+       141 Rajs                      TRAJS                             50
+       142 Davies                    CDAVIES                           50
+       143 Matos                     RMATOS                            50
+       144 Vargas                    PVARGAS                           50
+       149 Zlotkey                   EZLOTKEY                          80
+       174 Abel                      EABEL                             80
+       176 Taylor                    JTAYLOR                           80
+
+19 rows selected.
+
+DEMO@orcl> revoke select on hr.emplist_vu from g1;
+revoke select on hr.emplist_vu from g1
+*
+ERROR at line 1:
+ORA-01927: cannot REVOKE privileges you did not grant
+
+
+DEMO@orcl> ed
+Wrote file afiedt.buf
+
+  1* revoke select on hr.emplist_vu from g1
+DEMO@orcl> select * from emp; 
+select * from emp
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DEMO@orcl> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+EMP                            SYNONYM
+
+DEMO@orcl> 

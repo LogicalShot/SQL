@@ -1,0 +1,103 @@
+HR@orcl> alter table customer drop primary key
+  2  ;
+alter table customer drop primary key
+*
+ERROR at line 1:
+ORA-02273: this unique/primary key is referenced by some foreign keys 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* alter table customer drop primary key cascade
+HR@orcl> /
+
+Table altered.
+
+HR@orcl> alter table customer
+  2  add constraint cust_id_pk primary key(id);
+
+Table altered.
+
+HR@orcl> drop index cust_id_pk;
+drop index cust_id_pk
+           *
+ERROR at line 1:
+ORA-02429: cannot drop index used for enforcement of unique/primary key 
+
+
+HR@orcl> SELECT * FROM orders;
+
+  ORDER_ID PROD_ID        AMOUNT    CUST_ID                                     
+---------- ---------- ---------- ----------                                     
+      1001 T987                3                                                
+      1002 W654                2       6789                                     
+
+HR@orcl> insert into orders (order_id, prod_id)
+  2  values(1002, 'k123');
+insert into orders (order_id, prod_id)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (HR.SYS_C0011085) violated 
+
+
+HR@orcl> alter table orders
+  2  disable primary key;
+
+Table altered.
+
+HR@orcl> alter table orders
+  2  enable primary key;
+
+Table altered.
+
+HR@orcl> update orders
+  2  
+HR@orcl> insert into orders (order_id, prod_id)
+  2  values(1002, 'k123');
+insert into orders (order_id, prod_id)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (HR.SYS_C0011085) violated 
+
+
+HR@orcl> alter table orders
+  2  disable primary key;
+
+Table altered.
+
+HR@orcl> insert into orders (order_id, prod_id)
+  2  values(1002, 'K123');
+
+1 row created.
+
+HR@orcl> alter table orders enable primary key;
+alter table orders enable primary key
+*
+ERROR at line 1:
+ORA-02437: cannot validate (HR.SYS_C0011085) - primary key violated 
+
+
+HR@orcl> update orders
+  2  set order_id = 1003
+  3  where prod_id = 'K123';
+
+1 row updated.
+
+HR@orcl> commit;
+
+Commit complete.
+
+HR@orcl> alter table orders enable primary key;
+
+Table altered.
+
+HR@orcl> ls
+SP2-0042: unknown command "ls" - rest of line ignored.
+HR@orcl> !ls
+
+HR@orcl> !ls
+
+HR@orcl> get cre_test1
+SP2-0160: unable to open "cre_test1.sql"
+HR@orcl> exit

@@ -1,0 +1,98 @@
+HR@orcl> set sqlp "HR1> "
+HR1> grant select on hr.employees to demo;
+
+Grant succeeded.
+
+HR1> revoke select on hr.employees from demo;
+
+Revoke succeeded.
+
+HR1> create view emplist_vu
+  2  as
+  3  select employee_id empic, last_name empname, email, department_id deptid
+  4  FROM employees
+  5  WEHRE department_id <> 90;
+WEHRE department_id <> 90
+      *
+ERROR at line 5:
+ORA-00933: SQL command not properly ended 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  create view emplist_vu
+  2  as
+  3  select employee_id empic, last_name empname, email, department_id deptid
+  4  FROM employees
+  5* WHERE department_id <> 90
+HR1> /
+
+View created.
+
+HR1> select * from eplist_vu;
+select * from eplist_vu
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+HR1> select * from emplist_vu;
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID       
+---------- ------------------------- ------------------------- ----------       
+       200 Whalen                    JWHALEN                           10       
+       201 Hartstein                 MHARTSTE                          40       
+       202 Fay                       PFAY                              20       
+       205 Higgins                   SHIGGINS                         110       
+       206 Gietz                     WGIETZ                           110       
+       114 Raphealy                  DRAPHEAL                          60       
+       115 Dean                      JDEAN                             60       
+       103 Hunold                    AHUNOLD                           60       
+       104 Ernst                     BERNST                            60       
+       113 Popp                      LPOPP                            110       
+       107 Lorentz                   DLORENTZ                          60       
+
+     EMPIC EMPNAME                   EMAIL                         DEPTID       
+---------- ------------------------- ------------------------- ----------       
+       124 Mourgos                   KMOURGOS                          50       
+       141 Rajs                      TRAJS                             50       
+       142 Davies                    CDAVIES                           50       
+       143 Matos                     RMATOS                            50       
+       144 Vargas                    PVARGAS                           50       
+       149 Zlotkey                   EZLOTKEY                          80       
+       174 Abel                      EABEL                             80       
+       176 Taylor                    JTAYLOR                           80       
+
+19 rows selected.
+
+HR1> grant select on hr.emplist_vu to g1;
+
+Grant succeeded.
+
+HR1> select * from dept_sum_vu;
+
+DEPTNAME                           MINSAL     MAXSAL     AVGSAL                 
+------------------------------ ---------- ---------- ----------                 
+Administration                       4620       4620       4620                 
+Accounting                           8715      12600      11305                 
+IT                                   4410      11550       8652                 
+Executive                           17850      25200      20300                 
+Shipping                             2625       6090       3675                 
+Sales                                9933      12705    11588.5                 
+Marketing                            6930       6930       6930                 
+Deptname                            15015      15015      15015                 
+
+8 rows selected.
+
+HR1> grant select on hr.dept_sum_vu to demo;
+
+Grant succeeded.
+
+HR1> revoke select on hr.emplist_vu from g1;
+
+Revoke succeeded.
+
+HR1> /spool
+SP2-0042: unknown command "/spool" - rest of line ignored.
+HR1> spool off

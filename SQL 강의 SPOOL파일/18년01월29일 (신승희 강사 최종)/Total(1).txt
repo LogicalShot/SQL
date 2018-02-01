@@ -1,0 +1,1382 @@
+[oracle@localhost ~]$ sqlplus hr/hr
+
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Jan 29 14:11:31 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+
+HR@orcl> create global temporary table emp_temp1
+  2  as
+  3  SELECT employee_id id, last_name, salary, department_id
+  4  FROM employees;
+
+Table created.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  create global temporary table emp_temp2
+  2  on commit preserve rows
+  3  as
+  4  SELECT employee_id id, last_name, salary, department_id
+  5* FROM employees
+HR@orcl> /
+
+Table created.
+
+HR@orcl> conn hr/hr
+Connected.
+HR@orcl> SELECT * FROM emp_temp1;
+
+no rows selected
+
+HR@orcl> SELECT * FROM emp_temp2;
+
+no rows selected
+
+HR@orcl> insert into emp_temp1
+  2  select employee_id, last_name, salary, department_id
+  3  from employees
+  4  where department_id = 50;
+
+5 rows created.
+
+HR@orcl> SELECT * FROM emp_temp1
+  2  ;
+
+        ID LAST_NAME                     SALARY DEPARTMENT_ID
+---------- ------------------------- ---------- -------------
+       124 Mourgos                         6090            50
+       141 Rajs                            3675            50
+       142 Davies                          3255            50
+       143 Matos                           2730            50
+       144 Vargas                          2625            50
+
+HR@orcl> insert into emp_temp2
+  2  select employee_id, last_name, salary, department_id
+  3  from employees
+  4  where department_id = 50;
+
+5 rows created.
+
+HR@orcl> SELECT * FROM emp_temp1;
+
+        ID LAST_NAME                     SALARY DEPARTMENT_ID
+---------- ------------------------- ---------- -------------
+       124 Mourgos                         6090            50
+       141 Rajs                            3675            50
+       142 Davies                          3255            50
+       143 Matos                           2730            50
+       144 Vargas                          2625            50
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* SELECT * FROM emp_temp2
+HR@orcl> /
+
+        ID LAST_NAME                     SALARY DEPARTMENT_ID
+---------- ------------------------- ---------- -------------
+       124 Mourgos                         6090            50
+       141 Rajs                            3675            50
+       142 Davies                          3255            50
+       143 Matos                           2730            50
+       144 Vargas                          2625            50
+
+HR@orcl> commit
+  2  ;
+
+Commit complete.
+
+HR@orcl> SELECT * FROM emp_temp1;
+
+no rows selected
+
+HR@orcl> SELECT * FROM emp_temp2;
+
+        ID LAST_NAME                     SALARY DEPARTMENT_ID
+---------- ------------------------- ---------- -------------
+       124 Mourgos                         6090            50
+       141 Rajs                            3675            50
+       142 Davies                          3255            50
+       143 Matos                           2730            50
+       144 Vargas                          2625            50
+
+HR@orcl> conn hr/hr
+Connected.
+HR@orcl> /
+
+no rows selected
+
+HR@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+[oracle@localhost ~]$ pwd
+/home/oracle
+[oracle@localhost ~]$ cd /labs
+bash: cd: /labs: No such file or directory
+[oracle@localhost ~]$ cd labs
+[oracle@localhost labs]$ sqlplus hr/hr
+
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Jan 29 14:26:16 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+Oracle Database Vault and Real Application Testing options
+
+HR@orcl> pwd
+SP2-0042: unknown command "pwd" - rest of line ignored.
+HR@orcl> ls
+SP2-0042: unknown command "ls" - rest of line ignored.
+HR@orcl> @l
+SP2-0310: unable to open file "l.sql"
+HR@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+HR@orcl> get cre_expxt.sql
+SP2-0160: unable to open "cre_expxt.sql"
+HR@orcl> get cre_empxt.sql
+  1  CREATE TABLE empxt (empno       NUMBER(4),
+  2                          ename       VARCHAR2(10),
+  3                           job         VARCHAR2(9),
+  4                           mgr         NUMBER(4),
+  5                           hiredate    DATE,
+  6                           sal         NUMBER(7,2),
+  7                           comm        NUMBER(7,2),
+  8                           deptno      NUMBER(2)
+  9                          )
+ 10            ORGANIZATION EXTERNAL
+ 11             (
+ 12              TYPE ORACLE_LOADER
+ 13              DEFAULT DIRECTORY dir_1
+ 14              ACCESS PARAMETERS
+ 15              (
+ 16                records delimited by newline
+ 17                badfile dir_1:'empxt.bad'
+ 18                logfile dir_1:'empxt.log'
+ 19                fields terminated by ','
+ 20                missing field values are null
+ 21                ( empno, ename, job, mgr,
+ 22                 hiredate char date_format date mask "dd-mon-yy",
+ 23                  sal, comm, deptno
+ 24                )
+ 25              )
+ 26              LOCATION ('emp.dat')
+ 27            )
+ 28* /
+ 29  .
+HR@orcl> SELECT * FROM session_privs;
+
+PRIVILEGE
+----------------------------------------
+CREATE SESSION
+UNLIMITED TABLESPACE
+CREATE TABLE
+CREATE CLUSTER
+CREATE SYNONYM
+CREATE VIEW
+CREATE SEQUENCE
+CREATE PROCEDURE
+CREATE TRIGGER
+CREATE TYPE
+CREATE OPERATOR
+
+PRIVILEGE
+----------------------------------------
+CREATE INDEXTYPE
+
+12 rows selected.
+
+HR@orcl> conn / as sysdba
+Connected.
+SYS@orcl> create directory dir_1 as '/home/oracle/emp_dir';
+
+Directory created.
+
+SYS@orcl> GRANT read, write on directory dir_1 TO hr;
+
+Grant succeeded.
+
+SYS@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+SYS@orcl> cd 
+SP2-0042: unknown command "cd" - rest of line ignored.
+SYS@orcl> conn hr/hr
+Connected.
+HR@orcl> @cre_empxt
+
+Table created.
+
+HR@orcl> select * from cre_empxt
+  2  ;
+select * from cre_empxt
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> select * from empxt
+  2  ;
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7369 SMITH      CLERK           7902 17-DEC-80        800          0
+        20
+
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600          0
+        30
+
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250          0
+        30
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7566 JONES      MANAGER         7839 02-APR-81       2975          0
+        20
+
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250          0
+        30
+
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850          0
+        30
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450          0
+        10
+
+
+7 rows selected.
+
+HR@orcl> set linesize 150
+HR@orcl> select * from empxt
+  2  ;
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7369 SMITH      CLERK           7902 17-DEC-80        800          0         20
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600          0         30
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250          0         30
+      7566 JONES      MANAGER         7839 02-APR-81       2975          0         20
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250          0         30
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850          0         30
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450          0         10
+
+7 rows selected.
+
+HR@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+HR@orcl> get cre_empxt2.sql
+  1  create table empxt2
+  2        Organization external
+  3       (type oracle_datapump
+  4        Default directory dir_1
+  5        Location('emp2.dat'))
+  6        As
+  7        Select * from employees
+  8* /
+HR@orcl> @cre_empxt2.sql
+
+Table created.
+
+HR@orcl> select * from empxt2;
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        200 Jennifer             Whalen                    JWHALEN                  515.123.4444          17-SEP-87 AD_ASST          4620
+                      101            10
+
+        201 Michael              Hartstein                 MHARTSTE                 515.123.5555          17-FEB-96 MK_MAN          15015
+                      100            40
+
+        202 Pat                  Fay                       PFAY                     603.123.6666          17-AUG-97 MK_REP           6930
+                      201            20
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        205 Shelley              Higgins                   SHIGGINS                 515.123.8080          07-JUN-94 AC_MGR          12600
+                      101           110
+
+        206 William              Gietz                     WGIETZ                   515.123.8181          07-JUN-94 AC_ACCOUNT       8715
+                      205           110
+
+        114 Den                  Raphealy                  DRAPHEAL                 515.123.6789          02-MAR-99 SA_REP          11550
+            .2        100            60
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        115 James                Dean                      JDEAN                    515.123.6789          02-MAR-99 SA_REP          11550
+            .2        100            60
+
+        100 Steven               King                      SKING                    515.123.4567          17-JUN-87 AD_PRES         25200
+                                     90
+
+        101 Neena                Kochhar                   NKOCHHAR                 515.123.4568          21-SEP-89 AD_VP           17850
+                      100            90
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        102 Lex                  De Haan                   LDEHAAN                  515.123.4569          13-JAN-93 AD_VP           17850
+                      100            90
+
+        103 Alexander            Hunold                    AHUNOLD                  590.423.4567          03-JAN-90 IT_PROG          9450
+                      102            60
+
+        104 Bruce                Ernst                     BERNST                   590.423.4568          21-MAY-91 IT_PROG          6300
+                      103            60
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        113 Louis                Popp                      LPOPP                    123.345.4567          25-JAN-18 AC_MGR          12600
+                      205           110
+
+        107 Diana                Lorentz                   DLORENTZ                 590.423.5567          07-FEB-99 IT_PROG          4410
+                      103            60
+
+        124 Kevin                Mourgos                   KMOURGOS                 650.123.5234          16-NOV-99 ST_MAN           6090
+                      100            50
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        141 Trenna               Rajs                      TRAJS                    650.121.8009          17-OCT-95 ST_CLERK         3675
+                      124            50
+
+        142 Curtis               Davies                    CDAVIES                  650.121.2994          29-JAN-97 ST_CLERK         3255
+                      124            50
+
+        143 Randall              Matos                     RMATOS                   650.121.2874          15-MAR-98 ST_CLERK         2730
+                      124            50
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        144 Peter                Vargas                    PVARGAS                  650.121.2004          09-JUL-98 ST_CLERK         2625
+                      124            50
+
+        149 Eleni                Zlotkey                   EZLOTKEY                 011.44.1344.429018   29-JAN-00 SA_MAN         12127.5
+            .2        100            80
+
+        174 Ellen                Abel                      EABEL                    011.44.1644.429267   11-MAY-96 SA_REP           12705
+            .3        149            80
+
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                    PHONE_NUMBER          HIRE_DATE JOB_ID         SALARY
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ----------
+COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+-------------- ---------- -------------
+        176 Jonathon             Taylor                    JTAYLOR                  011.44.1644.429265   24-MAY-98 SA_REP            9933
+            .2        149            80
+
+        178 Kimberely            Grant                     KGRANT                   011.44.1644.429263   24-MAY-99 SA_REP            7350
+           .15        149
+
+
+23 rows selected.
+
+HR@orcl> show linesize
+linesize 150
+HR@orcl> pwd
+SP2-0042: unknown command "pwd" - rest of line ignored.
+HR@orcl> !pwd
+/home/oracle/labs
+
+HR@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+HR@orcl> SELECT * FROM tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+BIN$Y+FTmPhv2m3gUAB/AQAS/w==$0 TABLE
+COUNTRIES                      TABLE
+DEPARTMENTS                    TABLE
+DEPT                           TABLE
+DEPT80                         TABLE
+DEPT80_VU                      VIEW
+DEPT_LIST_VU                   VIEW
+DEPT_SUM_VU                    VIEW
+DSUM                           SYNONYM
+EMPLIST_VU                     VIEW
+EMPLOYEES                      TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+EMPVU20                        VIEW
+EMPXT                          TABLE
+EMPXT2                         TABLE
+EMP_TEMP1                      TABLE
+EMP_TEMP2                      TABLE
+JOBS                           TABLE
+JOB_GRADES                     TABLE
+JOB_HISTORY                    TABLE
+LOCATIONS                      TABLE
+MY_EMPLOYEE                    TABLE
+REGIONS                        TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+SALES_REPS                     TABLE
+
+23 rows selected.
+
+HR@orcl> @cre_minstab.sql;
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+1 row created.
+
+
+Commit complete.
+
+
+Table created.
+
+
+Table created.
+
+HR@orcl> SELECT * FROM tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+BIN$Y+FTmPhv2m3gUAB/AQAS/w==$0 TABLE
+COUNTRIES                      TABLE
+DEPARTMENTS                    TABLE
+DEPT                           TABLE
+DEPT80                         TABLE
+DEPT80_VU                      VIEW
+DEPT_LIST_VU                   VIEW
+DEPT_SUM_VU                    VIEW
+DSUM                           SYNONYM
+EMPLIST_VU                     VIEW
+EMPLOYEES                      TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+EMPVU20                        VIEW
+EMPXT                          TABLE
+EMPXT2                         TABLE
+EMP_TEMP1                      TABLE
+EMP_TEMP2                      TABLE
+HIREDATE_HISTORY               TABLE
+HIREDATE_HISTORY_00            TABLE
+HIREDATE_HISTORY_99            TABLE
+JOBS                           TABLE
+JOB_GRADES                     TABLE
+JOB_HISTORY                    TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+LOCATIONS                      TABLE
+MGR_HISTORY                    TABLE
+MY_EMPLOYEE                    TABLE
+REGIONS                        TABLE
+SALES_INFO                     TABLE
+SALES_REPS                     TABLE
+SALES_SOURCE_DATA              TABLE
+SAL_HISTORY                    TABLE
+SPECIAL_SAL                    TABLE
+
+31 rows selected.
+
+HR@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+HR@orcl> get m_ins1.sql;
+  1  INSERT  ALL
+  2  INTO sal_history VALUES(EMPID,HIREDATE,SAL)
+  3  INTO mgr_history VALUES(EMPID,MGR,SAL)
+  4  SELECT employee_id EMPID, hire_date HIREDATE, salary SAL, manager_id MGR 
+  5  FROM  employees
+  6  WHERE employee_id > 200
+  7* /
+HR@orcl> @m_ins1.sql
+
+8 rows created.
+
+HR@orcl> SELECT * FROM sal_history;
+
+EMPLOYEE_ID HIRE_DATE     SALARY
+----------- --------- ----------
+        201 17-FEB-96      15015
+        202 17-AUG-97       6930
+        205 07-JUN-94      12600
+        206 07-JUN-94       8715
+
+HR@orcl> SELECT * FROM mgr_history;
+
+EMPLOYEE_ID MANAGER_ID     SALARY
+----------- ---------- ----------
+        201        100      15015
+        202        201       6930
+        205        101      12600
+        206        205       8715
+
+HR@orcl> ROLLBACK;
+
+Rollback complete.
+
+HR@orcl> get m_ins2.sql
+  1  INSERT ALL
+  2  WHEN SAL > 10000 THEN
+  3  INTO sal_history VALUES(EMPID,HIREDATE,SAL)
+  4  WHEN MGR > 200   THEN 
+  5  INTO mgr_history VALUES(EMPID,MGR,SAL)  
+  6      SELECT employee_id EMPID,hire_date HIREDATE,  
+  7             salary SAL, manager_id MGR 
+  8      FROM   employees
+  9      WHERE  employee_id > 200
+ 10* /
+HR@orcl> @m_ins2.sql
+
+4 rows created.
+
+HR@orcl> SELECT * FROM sal_historyl;
+SELECT * FROM sal_historyl
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> SELECT * FROM sal_history;
+
+EMPLOYEE_ID HIRE_DATE     SALARY
+----------- --------- ----------
+        201 17-FEB-96      15015
+        205 07-JUN-94      12600
+
+HR@orcl> SELECT * FROM mgr_history;
+
+EMPLOYEE_ID MANAGER_ID     SALARY
+----------- ---------- ----------
+        202        201       6930
+        206        205       8715
+
+HR@orcl> get m_ins3.sql
+  1  INSERT FIRST   
+  2  WHEN SAL  > 25000  THEN
+  3  INTO special_sal VALUES(DEPTID, SAL) 
+  4  WHEN HIREDATE like ('%00%') THEN    
+  5  INTO hiredate_history_00 VALUES(DEPTID,HIREDATE)  
+  6  WHEN HIREDATE like ('%99%') THEN
+  7  INTO hiredate_history_99 VALUES(DEPTID, HIREDATE)
+  8    ELSE  INTO hiredate_history VALUES(DEPTID, HIREDATE)
+  9    SELECT department_id DEPTID, SUM(salary) SAL, MAX(hire_date) HIREDATE  
+ 10    FROM   employees
+ 11    GROUP BY department_id
+ 12* /
+HR@orcl> @m_ins3
+
+9 rows created.
+
+HR@orcl> SELECT * FROM sal_history;
+
+EMPLOYEE_ID HIRE_DATE     SALARY
+----------- --------- ----------
+        201 17-FEB-96      15015
+        205 07-JUN-94      12600
+
+HR@orcl> SELECT * FROM mgr_history;
+
+EMPLOYEE_ID MANAGER_ID     SALARY
+----------- ---------- ----------
+        202        201       6930
+        206        205       8715
+
+HR@orcl> SELECT * FROM sales_source_data;
+
+EMPLOYEE_ID    WEEK_ID  SALES_MON  SALES_TUE  SALES_WED SALES_THUR  SALES_FRI
+----------- ---------- ---------- ---------- ---------- ---------- ----------
+        178          6       1750       2200       1500       1500       3000
+
+HR@orcl> get m_ins3
+  1  INSERT FIRST   
+  2  WHEN SAL  > 25000  THEN
+  3  INTO special_sal VALUES(DEPTID, SAL) 
+  4  WHEN HIREDATE like ('%00%') THEN    
+  5  INTO hiredate_history_00 VALUES(DEPTID,HIREDATE)  
+  6  WHEN HIREDATE like ('%99%') THEN
+  7  INTO hiredate_history_99 VALUES(DEPTID, HIREDATE)
+  8    ELSE  INTO hiredate_history VALUES(DEPTID, HIREDATE)
+  9    SELECT department_id DEPTID, SUM(salary) SAL, MAX(hire_date) HIREDATE  
+ 10    FROM   employees
+ 11    GROUP BY department_id
+ 12* /
+HR@orcl> get m_ins4
+  1  INSERT ALL
+  2  INTO sales_info VALUES (employee_id,week_id,sales_MON)  
+  3  INTO sales_info VALUES (employee_id,week_id,sales_TUE)
+  4  INTO sales_info VALUES (employee_id,week_id,sales_WED)
+  5  INTO sales_info VALUES (employee_id,week_id,sales_THUR)
+  6  INTO sales_info VALUES (employee_id,week_id, sales_FRI)
+  7  SELECT EMPLOYEE_ID, week_id, sales_MON, sales_TUE,
+  8         sales_WED, sales_THUR,sales_FRI 
+  9  FROM sales_source_data
+ 10* /
+HR@orcl> desc sales_info
+ Name                                                                               Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ EMPLOYEE_ID                                                                         NUMBER(6)
+ WEEK                                                                                NUMBER(2)
+ SALES                                                                               NUMBER(8,2)
+
+HR@orcl> @m_ins4
+
+5 rows created.
+
+HR@orcl> SELECT * FROM sales_info;
+
+EMPLOYEE_ID       WEEK      SALES
+----------- ---------- ----------
+        178          6       1750
+        178          6       2200
+        178          6       1500
+        178          6       1500
+        178          6       3000
+
+HR@orcl> !ls
+afiedt.buf       cre_test1.sql    m_ins1.sql  q12.sql  q4.sql  regexp_tab.sql
+cre_emp13.sql    creuser.sql      m_ins2.sql  q13.sql  q5.sql  two(hr2).lst
+cre_empl.sql     demobld.sql      m_ins3.sql  q14.sql  q6.sql
+cre_empxt2.sql   emp.dat          m_ins4.sql  q1.sql   q7.sql
+cre_empxt.sql    lab_05_06.sql    q10.sql     q2.sql   q8.sql
+cre_minstab.sql  merge_emp13.sql  q11.sql     q3.sql   q9.sql
+
+HR@orcl> @cre_emp13.sql;
+drop table emp13
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+
+Table created.
+
+
+3 rows updated.
+
+
+Commit complete.
+
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        149 Zlotkey                   SA_MAN        12127.5           200
+        174 Abel                      SA_REP          12705           200
+        176 Taylor                    SA_REP           9933           200
+
+HR@orcl> get merge_emp13.sql
+  1  MERGE INTO emp13 c
+  2       USING employees e
+  3       ON (c.employee_id = e.employee_id)
+  4     WHEN MATCHED THEN
+  5       UPDATE SET
+  6         c.last_name      = e.last_name,
+  7         c.job_id         = e.job_id,
+  8         c.salary         = e.salary,
+  9         c.department_id  = e.department_id
+ 10     WHEN NOT MATCHED THEN
+ 11       INSERT VALUES(e.employee_id, e.last_name,e.job_id,
+ 12            e.salary, e.department_id)
+ 13  /
+ 14  COMMIT
+ 15* /
+HR@orcl> @merge_emp13
+
+23 rows merged.
+
+
+Commit complete.
+
+HR@orcl> SELECT * FROM emp13;
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        149 Zlotkey                   SA_MAN        12127.5            80
+        174 Abel                      SA_REP          12705            80
+        176 Taylor                    SA_REP           9933            80
+        144 Vargas                    ST_CLERK         2625            50
+        143 Matos                     ST_CLERK         2730            50
+        202 Fay                       MK_REP           6930            20
+        141 Rajs                      ST_CLERK         3675            50
+        103 Hunold                    IT_PROG          9450            60
+        201 Hartstein                 MK_MAN          15015            40
+        101 Kochhar                   AD_VP           17850            90
+        104 Ernst                     IT_PROG          6300            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        200 Whalen                    AD_ASST          4620            10
+        113 Popp                      AC_MGR          12600           110
+        102 De Haan                   AD_VP           17850            90
+        107 Lorentz                   IT_PROG          4410            60
+        100 King                      AD_PRES         25200            90
+        142 Davies                    ST_CLERK         3255            50
+        206 Gietz                     AC_ACCOUNT       8715           110
+        114 Raphealy                  SA_REP          11550            60
+        124 Mourgos                   ST_MAN           6090            50
+        205 Higgins                   AC_MGR          12600           110
+        115 Dean                      SA_REP          11550            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        178 Grant                     SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> update emp13
+  2  set salary = 3000
+  3  where employee_id = 144;
+
+1 row updated.
+
+HR@orcl> commit
+  2  select * from emp13;
+select * from emp13
+*
+ERROR at line 2:
+ORA-02185: a token other than WORK follows COMMIT
+
+
+HR@orcl> select * from emp13;
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        149 Zlotkey                   SA_MAN        12127.5            80
+        174 Abel                      SA_REP          12705            80
+        176 Taylor                    SA_REP           9933            80
+        144 Vargas                    ST_CLERK         3000            50
+        143 Matos                     ST_CLERK         2730            50
+        202 Fay                       MK_REP           6930            20
+        141 Rajs                      ST_CLERK         3675            50
+        103 Hunold                    IT_PROG          9450            60
+        201 Hartstein                 MK_MAN          15015            40
+        101 Kochhar                   AD_VP           17850            90
+        104 Ernst                     IT_PROG          6300            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        200 Whalen                    AD_ASST          4620            10
+        113 Popp                      AC_MGR          12600           110
+        102 De Haan                   AD_VP           17850            90
+        107 Lorentz                   IT_PROG          4410            60
+        100 King                      AD_PRES         25200            90
+        142 Davies                    ST_CLERK         3255            50
+        206 Gietz                     AC_ACCOUNT       8715           110
+        114 Raphealy                  SA_REP          11550            60
+        124 Mourgos                   ST_MAN           6090            50
+        205 Higgins                   AC_MGR          12600           110
+        115 Dean                      SA_REP          11550            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        178 Grant                     SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> SELECT salary from emp13
+  2  as of timestamp (sysdate-3/(24*60))
+  3  where employee_id = 144;
+
+    SALARY
+----------
+      2625
+
+HR@orcl> update emp13
+  2  set salary = 2625
+  3  where employee_id = 144;
+
+1 row updated.
+
+HR@orcl> commit
+  2  ;
+
+Commit complete.
+
+HR@orcl> SELECT * FROM emp13    
+  2  ;
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        149 Zlotkey                   SA_MAN        12127.5            80
+        174 Abel                      SA_REP          12705            80
+        176 Taylor                    SA_REP           9933            80
+        144 Vargas                    ST_CLERK         2625            50
+        143 Matos                     ST_CLERK         2730            50
+        202 Fay                       MK_REP           6930            20
+        141 Rajs                      ST_CLERK         3675            50
+        103 Hunold                    IT_PROG          9450            60
+        201 Hartstein                 MK_MAN          15015            40
+        101 Kochhar                   AD_VP           17850            90
+        104 Ernst                     IT_PROG          6300            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        200 Whalen                    AD_ASST          4620            10
+        113 Popp                      AC_MGR          12600           110
+        102 De Haan                   AD_VP           17850            90
+        107 Lorentz                   IT_PROG          4410            60
+        100 King                      AD_PRES         25200            90
+        142 Davies                    ST_CLERK         3255            50
+        206 Gietz                     AC_ACCOUNT       8715           110
+        114 Raphealy                  SA_REP          11550            60
+        124 Mourgos                   ST_MAN           6090            50
+        205 Higgins                   AC_MGR          12600           110
+        115 Dean                      SA_REP          11550            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        178 Grant                     SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> update emp13
+  2  set salary = sarlary*1.1
+  3  where employee_id = 144;
+set salary = sarlary*1.1
+             *
+ERROR at line 2:
+ORA-00904: "SARLARY": invalid identifier
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  update emp13
+  2  set salary = salary*1.1
+  3* where employee_id = 144
+HR@orcl> /
+
+1 row updated.
+
+HR@orcl> col versions_stamptime for a25
+HR@orcl> col versions_endtime for a25 
+HR@orcl> select versions_starttime, versions_endtime, salary
+  2  from emp13 
+  3  versions between timestamp minvalue and maxvalue 
+  4  where employee_id = 144;
+
+VERSIONS_STARTTIME                                                          VERSIONS_ENDTIME              SALARY
+--------------------------------------------------------------------------- ------------------------- ----------
+29-JAN-18 04.26.13 PM                                                              2625
+                                                                            29-JAN-18 04.26.13 PM           2625
+
+HR@orcl> show linesize
+linesize 150
+HR@orcl> set linesize 200
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select versions_starttime, versions_endtime, salary
+  2  from emp13
+  3  versions between timestamp minvalue and maxvalue
+  4* where employee_id = 144
+HR@orcl> /
+
+VERSIONS_STARTTIME                                                          VERSIONS_ENDTIME              SALARY
+--------------------------------------------------------------------------- ------------------------- ----------
+29-JAN-18 04.26.13 PM                                                                                       2625
+                                                                            29-JAN-18 04.26.13 PM           2625
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select versions_starttime, versions_endtime, salary
+  2  from emp13
+  3  versions between timestamp minvalue and maxvalue
+  4* where employee_id = 144
+HR@orcl> SELECT systimestamp, current_timestamp FROM dual;
+
+SYSTIMESTAMP                                                                CURRENT_TIMESTAMP
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 04.43.02.611426 PM +09:00                                         29-JAN-18 04.43.02.611433 PM +09:00
+
+HR@orcl> set linesize 1000
+HR@orcl> /
+
+SYSTIMESTAMP                                                                CURRENT_TIMESTAMP
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 04.43.12.704070 PM +09:00                                         29-JAN-18 04.43.12.704075 PM +09:00
+
+HR@orcl> alter session set time_zone = '-7:00';
+
+Session altered.
+
+HR@orcl> SELECT systimestamp, current_timestamp FROM dual;
+
+SYSTIMESTAMP                                                                CURRENT_TIMESTAMP
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 04.44.33.152295 PM +09:00                                         29-JAN-18 12.44.33.152301 AM -07:00
+
+HR@orcl> conn hr/hr
+Connected.
+HR@orcl> /
+
+SYSTIMESTAMP                                                                CURRENT_TIMESTAMP
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 04.45.43.330185 PM +09:00                                         29-JAN-18 04.45.43.330190 PM +09:00
+
+HR@orcl> SELECT current_date,
+  2  current_timestamp, localtimestamp FROM dual;
+
+CURRENT_D CURRENT_TIMESTAMP                                                           LOCALTIMESTAMP
+--------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 29-JAN-18 04.46.47.000000 PM +09:00                                         29-JAN-18 04.46.47.000000 PM
+
+HR@orcl> create talbe timetest1
+  2  (a date,
+  3  b timestamp,
+  4  c timestamp(0) with time zone,
+  5  d timestamp with local time zone);
+create talbe timetest1
+       *
+ERROR at line 1:
+ORA-00901: invalid CREATE command
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  create table timetest1
+  2  (a date,
+  3  b timestamp,
+  4  c timestamp(0) with time zone,
+  5* d timestamp with local time zone)
+HR@orcl> /
+
+Table created.
+
+HR@orcl> insert into timetest1
+  2  values(sysdate,sysdate,sysdate,sysdate);
+
+1 row created.
+
+HR@orcl> commit;
+
+Commit complete.
+
+HR@orcl> SELECT * FROM timestamp1;
+SELECT * FROM timestamp1
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> SELECT * FROM timetest1;
+
+A         B                                                                           C                                                       D
+--------- --------------------------------------------------------------------------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 29-JAN-18 04.51.51.000000 PM                                                29-JAN-18 04.51.51 PM +09:00                            29-JAN-18 04.51.51.000000 PM
+
+HR@orcl> alter session set time_zone = '-10:00';
+
+Session altered.
+
+HR@orcl> SELECT * FROM timetest1;
+
+A         B                                                                           C                                                       D
+--------- --------------------------------------------------------------------------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 29-JAN-18 04.51.51.000000 PM                                                29-JAN-18 04.51.51 PM +09:00                            28-JAN-18 09.51.51.000000 PM
+
+HR@orcl> CREATE TABLE timetest2
+  2  (a interval year to month,
+  3  b interval day to second);
+
+Table created.
+
+HR@orcl> insert into timetest2
+  2  values(interval '12-6' year to month,
+  3         interval '10 11:30:30' day to second);
+
+1 row created.
+
+HR@orcl> commit
+  2  '     
+  3  ;
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+HR@orcl> commit;
+
+Commit complete.
+
+HR@orcl> select * from timestest2;
+select * from timestest2
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+HR@orcl> select * from timetest2;
+
+A                                                                           B
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
++12-06                                                                      +10 11:30:30.000000
+
+HR@orcl> SELECT employee_id, hire_date, hire_date+a
+  2  from employees, timetest2;
+
+EMPLOYEE_ID HIRE_DATE HIRE_DATE
+----------- --------- ---------
+        200 17-SEP-87 17-MAR-00
+        201 17-FEB-96 17-AUG-08
+        202 17-AUG-97 17-FEB-10
+        205 07-JUN-94 07-DEC-06
+        206 07-JUN-94 07-DEC-06
+        114 02-MAR-99 02-SEP-11
+        115 02-MAR-99 02-SEP-11
+        100 17-JUN-87 17-DEC-99
+        101 21-SEP-89 21-MAR-02
+        102 13-JAN-93 13-JUL-05
+        103 03-JAN-90 03-JUL-02
+
+EMPLOYEE_ID HIRE_DATE HIRE_DATE
+----------- --------- ---------
+        104 21-MAY-91 21-NOV-03
+        113 25-JAN-18 25-JUL-30
+        107 07-FEB-99 07-AUG-11
+        124 16-NOV-99 16-MAY-12
+        141 17-OCT-95 17-APR-08
+        142 29-JAN-97 29-JUL-09
+        143 15-MAR-98 15-SEP-10
+        144 09-JUL-98 09-JAN-11
+        149 29-JAN-00 29-JUL-12
+        174 11-MAY-96 11-NOV-08
+        176 24-MAY-98 24-NOV-10
+
+EMPLOYEE_ID HIRE_DATE HIRE_DATE
+----------- --------- ---------
+        178 24-MAY-99 24-NOV-11
+
+23 rows selected.
+
+HR@orcl> select systimestamp, systimestamp+b FROM dual, timetest2;
+
+SYSTIMESTAMP                                                                SYSTIMESTAMP+B
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+29-JAN-18 05.18.15.834677 PM +09:00                                         09-FEB-18 04.48.45.834677000 AM +09:00
+
+HR@orcl> SELECT employee_id, hire_date, extract(year from hire_date)
+  2  FROM employees;
+
+EMPLOYEE_ID HIRE_DATE EXTRACT(YEARFROMHIRE_DATE)
+----------- --------- --------------------------
+        200 17-SEP-87                       1987
+        201 17-FEB-96                       1996
+        202 17-AUG-97                       1997
+        205 07-JUN-94                       1994
+        206 07-JUN-94                       1994
+        114 02-MAR-99                       1999
+        115 02-MAR-99                       2099
+        100 17-JUN-87                       1987
+        101 21-SEP-89                       1989
+        102 13-JAN-93                       1993
+        103 03-JAN-90                       1990
+
+EMPLOYEE_ID HIRE_DATE EXTRACT(YEARFROMHIRE_DATE)
+----------- --------- --------------------------
+        104 21-MAY-91                       1991
+        113 25-JAN-18                       2018
+        107 07-FEB-99                       1999
+        124 16-NOV-99                       1999
+        141 17-OCT-95                       1995
+        142 29-JAN-97                       1997
+        143 15-MAR-98                       1998
+        144 09-JUL-98                       1998
+        149 29-JAN-00                       2000
+        174 11-MAY-96                       1996
+        176 24-MAY-98                       1998
+
+EMPLOYEE_ID HIRE_DATE EXTRACT(YEARFROMHIRE_DATE)
+----------- --------- --------------------------
+        178 24-MAY-99                       1999
+
+23 rows selected.
+
+HR@orcl> SELECT * FROM emp13;
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        149 Zlotkey                   SA_MAN        12127.5            80
+        174 Abel                      SA_REP          12705            80
+        176 Taylor                    SA_REP           9933            80
+        144 Vargas                    ST_CLERK       2887.5            50
+        143 Matos                     ST_CLERK         2730            50
+        202 Fay                       MK_REP           6930            20
+        141 Rajs                      ST_CLERK         3675            50
+        103 Hunold                    IT_PROG          9450            60
+        201 Hartstein                 MK_MAN          15015            40
+        101 Kochhar                   AD_VP           17850            90
+        104 Ernst                     IT_PROG          6300            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        200 Whalen                    AD_ASST          4620            10
+        113 Popp                      AC_MGR          12600           110
+        102 De Haan                   AD_VP           17850            90
+        107 Lorentz                   IT_PROG          4410            60
+        100 King                      AD_PRES         25200            90
+        142 Davies                    ST_CLERK         3255            50
+        206 Gietz                     AC_ACCOUNT       8715           110
+        114 Raphealy                  SA_REP          11550            60
+        124 Mourgos                   ST_MAN           6090            50
+        205 Higgins                   AC_MGR          12600           110
+        115 Dean                      SA_REP          11550            60
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- ---------- -------------
+        178 Grant                     SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> alter table emp13 drop column last_name;
+
+Table altered.
+
+HR@orcl> SELECT * FROM emp13;
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID
+----------- ---------- ---------- -------------
+        149 SA_MAN        12127.5            80
+        174 SA_REP          12705            80
+        176 SA_REP           9933            80
+        144 ST_CLERK       2887.5            50
+        143 ST_CLERK         2730            50
+        202 MK_REP           6930            20
+        141 ST_CLERK         3675            50
+        103 IT_PROG          9450            60
+        201 MK_MAN          15015            40
+        101 AD_VP           17850            90
+        104 IT_PROG          6300            60
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID
+----------- ---------- ---------- -------------
+        200 AD_ASST          4620            10
+        113 AC_MGR          12600           110
+        102 AD_VP           17850            90
+        107 IT_PROG          4410            60
+        100 AD_PRES         25200            90
+        142 ST_CLERK         3255            50
+        206 AC_ACCOUNT       8715           110
+        114 SA_REP          11550            60
+        124 ST_MAN           6090            50
+        205 AC_MGR          12600           110
+        115 SA_REP          11550            60
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID
+----------- ---------- ---------- -------------
+        178 SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> alter table emp13 add hire_date timestamp(0);
+
+Table altered.
+
+HR@orcl> SELECT * FROM emp13;
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        149 SA_MAN        12127.5            80
+        174 SA_REP          12705            80
+        176 SA_REP           9933            80
+        144 ST_CLERK       2887.5            50
+        143 ST_CLERK         2730            50
+        202 MK_REP           6930            20
+        141 ST_CLERK         3675            50
+        103 IT_PROG          9450            60
+        201 MK_MAN          15015            40
+        101 AD_VP           17850            90
+        104 IT_PROG          6300            60
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        200 AD_ASST          4620            10
+        113 AC_MGR          12600           110
+        102 AD_VP           17850            90
+        107 IT_PROG          4410            60
+        100 AD_PRES         25200            90
+        142 ST_CLERK         3255            50
+        206 AC_ACCOUNT       8715           110
+        114 SA_REP          11550            60
+        124 ST_MAN           6090            50
+        205 AC_MGR          12600           110
+        115 SA_REP          11550            60
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        178 SA_REP           7350
+
+23 rows selected.
+
+HR@orcl> update emp13 e
+  2  set hire_date = (select hire_date from employees
+  3                   where employees.employee_id = e.employees_id);
+                 where employees.employee_id = e.employees_id)
+                                               *
+ERROR at line 3:
+ORA-00904: "E"."EMPLOYEES_ID": invalid identifier
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  update emp13 e
+  2  set hire_date = (select hire_date from employees
+  3*                  where employees.employee_id = e.employee_id)
+HR@orcl> /
+
+23 rows updated.
+
+HR@orcl> SELECT * FROM emp13;
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        149 SA_MAN        12127.5            80 29-JAN-00 12.00.00 AM
+        174 SA_REP          12705            80 11-MAY-96 12.00.00 AM
+        176 SA_REP           9933            80 24-MAY-98 12.00.00 AM
+        144 ST_CLERK       2887.5            50 09-JUL-98 12.00.00 AM
+        143 ST_CLERK         2730            50 15-MAR-98 12.00.00 AM
+        202 MK_REP           6930            20 17-AUG-97 12.00.00 AM
+        141 ST_CLERK         3675            50 17-OCT-95 12.00.00 AM
+        103 IT_PROG          9450            60 03-JAN-90 12.00.00 AM
+        201 MK_MAN          15015            40 17-FEB-96 12.00.00 AM
+        101 AD_VP           17850            90 21-SEP-89 12.00.00 AM
+        104 IT_PROG          6300            60 21-MAY-91 12.00.00 AM
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        200 AD_ASST          4620            10 17-SEP-87 12.00.00 AM
+        113 AC_MGR          12600           110 25-JAN-18 10.37.35 AM
+        102 AD_VP           17850            90 13-JAN-93 12.00.00 AM
+        107 IT_PROG          4410            60 07-FEB-99 12.00.00 AM
+        100 AD_PRES         25200            90 17-JUN-87 12.00.00 AM
+        142 ST_CLERK         3255            50 29-JAN-97 12.00.00 AM
+        206 AC_ACCOUNT       8715           110 07-JUN-94 12.00.00 AM
+        114 SA_REP          11550            60 02-MAR-99 12.00.00 AM
+        124 ST_MAN           6090            50 16-NOV-99 12.00.00 AM
+        205 AC_MGR          12600           110 07-JUN-94 12.00.00 AM
+        115 SA_REP          11550            60 02-MAR-99 12.00.00 AM
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- ---------------------------------------------------------------------------
+        178 SA_REP           7350               24-MAY-99 12.00.00 AM
+
+23 rows selected.
+
+HR@orcl> col hire_date for a25
+HR@orcl> /
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- -------------------------
+        149 SA_MAN        12127.5            80 29-JAN-00 12.00.00 AM
+        174 SA_REP          12705            80 11-MAY-96 12.00.00 AM
+        176 SA_REP           9933            80 24-MAY-98 12.00.00 AM
+        144 ST_CLERK       2887.5            50 09-JUL-98 12.00.00 AM
+        143 ST_CLERK         2730            50 15-MAR-98 12.00.00 AM
+        202 MK_REP           6930            20 17-AUG-97 12.00.00 AM
+        141 ST_CLERK         3675            50 17-OCT-95 12.00.00 AM
+        103 IT_PROG          9450            60 03-JAN-90 12.00.00 AM
+        201 MK_MAN          15015            40 17-FEB-96 12.00.00 AM
+        101 AD_VP           17850            90 21-SEP-89 12.00.00 AM
+        104 IT_PROG          6300            60 21-MAY-91 12.00.00 AM
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- -------------------------
+        200 AD_ASST          4620            10 17-SEP-87 12.00.00 AM
+        113 AC_MGR          12600           110 25-JAN-18 10.37.35 AM
+        102 AD_VP           17850            90 13-JAN-93 12.00.00 AM
+        107 IT_PROG          4410            60 07-FEB-99 12.00.00 AM
+        100 AD_PRES         25200            90 17-JUN-87 12.00.00 AM
+        142 ST_CLERK         3255            50 29-JAN-97 12.00.00 AM
+        206 AC_ACCOUNT       8715           110 07-JUN-94 12.00.00 AM
+        114 SA_REP          11550            60 02-MAR-99 12.00.00 AM
+        124 ST_MAN           6090            50 16-NOV-99 12.00.00 AM
+        205 AC_MGR          12600           110 07-JUN-94 12.00.00 AM
+        115 SA_REP          11550            60 02-MAR-99 12.00.00 AM
+
+EMPLOYEE_ID JOB_ID         SALARY DEPARTMENT_ID HIRE_DATE
+----------- ---------- ---------- ------------- -------------------------
+        178 SA_REP           7350               24-MAY-99 12.00.00 AM
+
+23 rows selected.

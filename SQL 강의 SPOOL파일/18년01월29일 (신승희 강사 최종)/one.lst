@@ -1,0 +1,160 @@
+HR@orcl> SELECT table_name, constraint_name FROM user_constraints
+  2  WHERE table_name IN ('CUSTOMER', 'ORDERS')
+  3  ;
+
+TABLE_NAME                     CONSTRAINT_NAME                                  
+------------------------------ ------------------------------                   
+CUSTOMER                       SYS_C0011081                                     
+CUSTOMER                       SYS_C0011083                                     
+ORDERS                         SYS_C0011084                                     
+ORDERS                         SYS_C0011085                                     
+ORDERS                         ORD_CUSTID_FK                                    
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT table_name, constraint_name, constraint_type FROM user_constraints
+  2* WHERE table_name IN ('CUSTOMER', 'ORDERS')
+HR@orcl> /
+
+TABLE_NAME                     CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+CUSTOMER                       SYS_C0011081                   C                 
+CUSTOMER                       SYS_C0011083                   P                 
+ORDERS                         SYS_C0011084                   C                 
+ORDERS                         SYS_C0011085                   P                 
+ORDERS                         ORD_CUSTID_FK                  R                 
+
+HR@orcl> desc orders
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ORDER_ID                                  NOT NULL NUMBER(4)
+ PROD_ID                                   NOT NULL VARCHAR2(10)
+ AMOUNT                                             NUMBER(2)
+ CUST_ID                                            NUMBER(4)
+
+HR@orcl> SELECT table_name, constraint_name, constraint_type FROM user_constraints
+  2  WHERE table_name IN('CUSTOMER', 'ORDERS')
+  3  ;
+
+TABLE_NAME                     CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+CUSTOMER                       SYS_C0011081                   C                 
+ORDERS                         SYS_C0011084                   C                 
+ORDERS                         SYS_C0011085                   P                 
+
+HR@orcl> /
+
+TABLE_NAME                     CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+CUSTOMER                       SYS_C0011081                   C                 
+CUSTOMER                       CUST_ID_PK                     P                 
+ORDERS                         SYS_C0011084                   C                 
+ORDERS                         SYS_C0011085                   P                 
+
+HR@orcl> SELECT table_name, index_name FROM user_indexes
+  2  WHERE table_name IN ('CUSTOMER', 'ORDERS');
+
+TABLE_NAME                     INDEX_NAME                                       
+------------------------------ ------------------------------                   
+ORDERS                         SYS_C0011085                                     
+CUSTOMER                       CUST_ID_PK                                       
+
+HR@orcl> 
+HR@orcl> SELECT table_name, constraint_name, constraint_type FROM user_constraintS
+  2  WHERE table_name IN ('CUSTOMER', 'ORDERS')
+  3  ;
+
+TABLE_NAME                     CONSTRAINT_NAME                C                 
+------------------------------ ------------------------------ -                 
+CUSTOMER                       SYS_C0011081                   C                 
+CUSTOMER                       CUST_ID_PK                     P                 
+ORDERS                         SYS_C0011084                   C                 
+ORDERS                         SYS_C0011085                   P                 
+
+HR@orcl> SELECT constraint_name, constraint_type
+  2  FROM user_constraints
+  3  WHERE table_name = 'TEST1';
+
+CONSTRAINT_NAME                C                                                
+------------------------------ -                                                
+CK1                            C                                                
+CK2                            C                                                
+SYS_C0011098                   P                                                
+FK_CONSTRAINT                  R                                                
+
+HR@orcl> /
+
+CONSTRAINT_NAME                C                                                
+------------------------------ -                                                
+SYS_C0011098                   P                                                
+FK_CONSTRAINT                  R                                                
+
+HR@orcl> drop table customer;
+
+Table dropped.
+
+HR@orcl> drop table orders;
+
+Table dropped.
+
+HR@orcl> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID                               
+------------------------------ ------- ----------                               
+BIGEMP                         TABLE                                            
+BIN$Y+FTmPhj2m3gUAB/AQAS/w==$0 TABLE                                            
+BIN$Y+FTmPhn2m3gUAB/AQAS/w==$0 TABLE                                            
+COUNTRIES                      TABLE                                            
+DEPARTMENTS                    TABLE                                            
+DEPT                           TABLE                                            
+DEPT80                         TABLE                                            
+DEPT80_VU                      VIEW                                             
+DEPT_LIST_VU                   VIEW                                             
+DEPT_SUM_VU                    VIEW                                             
+DSUM                           SYNONYM                                          
+
+TNAME                          TABTYPE  CLUSTERID                               
+------------------------------ ------- ----------                               
+EMPLIST_VU                     VIEW                                             
+EMPLOYEES                      TABLE                                            
+EMPVU20                        VIEW                                             
+JOBS                           TABLE                                            
+JOB_GRADES                     TABLE                                            
+JOB_HISTORY                    TABLE                                            
+LOCATIONS                      TABLE                                            
+MY_EMPLOYEE                    TABLE                                            
+REGIONS                        TABLE                                            
+SALES_REPS                     TABLE                                            
+TEST1                          TABLE                                            
+
+22 rows selected.
+
+HR@orcl> show recyclebin;
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME          
+---------------- ------------------------------ ------------ -------------------
+CUSTOMER         BIN$Y+FTmPhj2m3gUAB/AQAS/w==$0 TABLE        2018-01-29:10:40:10
+ORDERS           BIN$Y+FTmPhn2m3gUAB/AQAS/w==$0 TABLE        2018-01-29:10:40:14
+HR@orcl> desc customer
+ERROR:
+ORA-04043: object customer does not exist 
+
+
+HR@orcl> flashback table customer to before drop;
+
+Flashback complete.
+
+HR@orcl> desc customer;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(4)
+ NAME                                      NOT NULL VARCHAR2(25)
+
+HR@orcl> DROP table customer purge;
+
+Table dropped.
+
+HR@orcl> show recyclebin
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME          
+---------------- ------------------------------ ------------ -------------------
+ORDERS           BIN$Y+FTmPhn

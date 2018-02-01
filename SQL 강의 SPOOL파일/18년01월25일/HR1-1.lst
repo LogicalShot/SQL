@@ -1,0 +1,20 @@
+HR1> INSERT INTO sales_reps(id, name)
+  2  VALUES(180, 'Mark');
+
+1 row created.
+
+HR1> SELECT * FROM sales_reps;
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+       180 Mark                                                                 
+
+7 rows selected.
+
+HR1> spool off

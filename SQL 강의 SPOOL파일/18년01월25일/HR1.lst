@@ -1,0 +1,1353 @@
+HR1> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           30 Purchasing                            114        1700             
+           40 Human Resources                       203        2400             
+           50 Shipping                              121        1500             
+           60 IT                                    103        1400             
+           70 Public Relations                      204        2700             
+           80 Sales                                 145        2500             
+           90 Executive                             100        1700             
+          100 Finance                               108        1700             
+          110 Accounting                            205        1700             
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+          120 Treasury                                         1700             
+          130 Corporate Tax                                    1700             
+          140 Control And Credit                               1700             
+          150 Shareholder Services                             1700             
+          160 Benefits                                         1700             
+          170 Manufacturing                                    1700             
+          180 Construction                                     1700             
+          190 Contracting                                      1700             
+          200 Operations                                       1700             
+          210 IT Support                                       1700             
+          220 NOC                                              1700             
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+          230 IT Helpdesk                                      1700             
+          240 Government Sales                                 1700             
+          250 Retail Sales                                     1700             
+          260 Recruiting                                       1700             
+          270 Payroll                                          1700             
+
+27 rows selected.
+
+HR1> INSERT INTO departments
+  2  VALUES(70,'Public Relations', 100, 1700);
+INSERT INTO departments
+*
+ERROR at line 1:
+ORA-00001: unique constraint (HR.DEPT_ID_PK) violated 
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO departments
+  2* VALUES(70,'Public Relations', 100, 1700)
+HR1> @/home/oracle/labs/creuser
+Connected.
+Enter value for user_name: hr
+old   1: DROP USER &&user_name CASCADE
+new   1: DROP USER hr CASCADE
+
+User dropped.
+
+old   1: CREATE USER &&user_name IDENTIFIED BY &&user_name
+new   1: CREATE USER hr IDENTIFIED BY hr
+
+User created.
+
+old   1: GRANT CONNECT, RESOURCE TO  &&user_name
+new   1: GRANT CONNECT, RESOURCE TO  hr
+
+Grant succeeded.
+
+Connected.
+******  Creating REGIONS table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+******  Creating COUNTRIES table ....
+
+Table created.
+
+
+Table altered.
+
+******  Creating LOCATIONS table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+
+Sequence created.
+
+******  Creating DEPARTMENTS table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+
+Sequence created.
+
+******  Creating JOBS table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+******  Creating EMPLOYEES table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+
+Table altered.
+
+
+Sequence created.
+
+******  Creating JOB_HISTORY table ....
+
+Table created.
+
+
+Index created.
+
+
+Table altered.
+
+******  Creating EMP_DETAILS_VIEW view ...
+CREATE OR REPLACE VIEW emp_details_view
+                       *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+
+Commit complete.
+
+
+Session altered.
+
+******  Populating REGIONS table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating COUNTIRES table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating LOCATIONS table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating DEPARTMENTS table ....
+
+Table altered.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating JOBS table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating EMPLOYEES table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+******  Populating JOB_HISTORY table ....
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Table altered.
+
+
+Commit complete.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Index created.
+
+
+Commit complete.
+
+
+Procedure created.
+
+
+Trigger created.
+
+
+Procedure created.
+
+
+Trigger created.
+
+
+Commit complete.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Commit complete.
+
+
+Table altered.
+
+
+Table altered.
+
+
+Trigger dropped.
+
+
+Trigger dropped.
+
+
+Procedure dropped.
+
+
+Procedure dropped.
+
+
+66 rows deleted.
+
+
+21 rows deleted.
+
+
+16 rows deleted.
+
+
+21 rows deleted.
+
+
+7 rows deleted.
+
+
+20 rows deleted.
+
+
+1 row updated.
+
+
+1 row updated.
+
+
+2 rows deleted.
+
+
+1 row updated.
+
+
+Table altered.
+
+
+Table created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Commit complete.
+
+
+   NUM_EMP
+----------
+        20
+
+1 row selected.
+
+
+   NUM_DEP
+----------
+         8
+
+1 row selected.
+
+
+   NUM_LOC
+----------
+         5
+
+1 row selected.
+
+
+   NUM_REG
+----------
+         4
+
+1 row selected.
+
+
+   NUM_CTR
+----------
+         4
+
+1 row selected.
+
+
+   NUM_JOB
+----------
+        12
+
+1 row selected.
+
+
+    NUM_JH
+----------
+        10
+
+1 row selected.
+
+HR@orcl> set sqlp "HR1> "
+HR1> INSERT INTO departments
+  2  VALUES(70, 'Public Relations', 100, 1700);
+
+1 row created.
+
+HR1> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID
+------------- ------------------------------ ---------- -----------
+           10 Administration                        200        1700
+           20 Marketing                             201        1800
+           50 Shipping                              124        1500
+           60 IT                                    103        1400
+           80 Sales                                 149        2500
+           90 Executive                             100        1700
+          110 Accounting                            205        1700
+          190 Contracting                                      1700
+           70 Public Relations                      100        1700
+
+9 rows selected.
+
+HR1> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID
+------------- ------------------------------ ---------- -----------
+           10 Administration                        200        1700
+           20 Marketing                             201        1800
+           50 Shipping                              124        1500
+           60 IT                                    103        1400
+           80 Sales                                 149        2500
+           90 Executive                             100        1700
+          110 Accounting                            205        1700
+          190 Contracting                                      1700
+           70 Public Relations                      100        1700
+
+9 rows selected.
+
+HR1> /
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID
+------------- ------------------------------ ---------- -----------
+           30 Purchasing
+          100 Finance
+           10 Administration                        200        1700
+           20 Marketing                             201        1800
+           50 Shipping                              124        1500
+           60 IT                                    103        1400
+           80 Sales                                 149        2500
+           90 Executive                             100        1700
+          110 Accounting                            205        1700
+          190 Contracting                                      1700
+           70 Public Relations                      100        1700
+
+11 rows selected.
+
+HR1> INSERT INTO employees
+  2  VALUES(113,'Louis','Popp',LPOPP', '123.345.4567',SYSDATE,
+  3  'AC_ACCOUNT',6900, null, 205, 110);
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+HR1> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO employees
+  2  VALUES(113,'Louis','Popp','LPOPP', '123.345.4567',SYSDATE,
+  3* 'AC_ACCOUNT',6900, null, 205, 110)
+HR1> /
+
+1 row created.
+
+HR1> SELECT employee_id, last_name, hire_date
+  2  FROM employees;
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE
+----------- ------------------------- ---------
+        200 Whalen                    17-SEP-87
+        201 Hartstein                 17-FEB-96
+        202 Fay                       17-AUG-97
+        205 Higgins                   07-JUN-94
+        206 Gietz                     07-JUN-94
+        100 King                      17-JUN-87
+        101 Kochhar                   21-SEP-89
+        102 De Haan                   13-JAN-93
+        103 Hunold                    03-JAN-90
+        104 Ernst                     21-MAY-91
+        113 Popp                      25-JAN-18
+        107 Lorentz                   07-FEB-99
+        124 Mourgos                   16-NOV-99
+        141 Rajs                      17-OCT-95
+        142 Davies                    29-JAN-97
+        143 Matos                     15-MAR-98
+        144 Vargas                    09-JUL-98
+        149 Zlotkey                   29-JAN-00
+        174 Abel                      11-MAY-96
+        176 Taylor                    24-MAR-98
+        178 Grant                     24-MAY-99
+
+21 rows selected.
+
+HR1> conn hr/hr
+Connected.
+HR@orcl> set sqlp "HR1> "
+HR1> SELECT employee_id, last_name FROM employees
+  2  ;
+
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------
+        174 Abel
+        142 Davies
+        102 De Haan
+        104 Ernst
+        202 Fay
+        206 Gietz
+        178 Grant
+        201 Hartstein
+        205 Higgins
+        103 Hunold
+        100 King
+        101 Kochhar
+        107 Lorentz
+        143 Matos
+        124 Mourgos
+        113 Popp
+        141 Rajs
+        176 Taylor
+        144 Vargas
+        200 Whalen
+        149 Zlotkey
+
+21 rows selected.
+
+HR1> select * from departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID
+------------- ------------------------------ ---------- -----------
+           30 Purchasing
+          100 Finance
+           10 Administration                        200        1700
+           20 Marketing                             201        1800
+           50 Shipping                              124        1500
+           60 IT                                    103        1400
+           80 Sales                                 149        2500
+           90 Executive                             100        1700
+          110 Accounting                            205        1700
+          190 Contracting                                      1700
+           70 Public Relations                      100        1700
+
+11 rows selected.
+
+HR1> /
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID
+------------- ------------------------------ ---------- -----------
+           30 Purchasing
+          100 Finance
+           40 Deptname                                         2500
+           10 Administration                        200        1700
+           20 Marketing                             201        1800
+           50 Shipping                              124        1500
+           60 IT                                    103        1400
+           80 Sales                                 149        2500
+           90 Executive                             100        1700
+          110 Accounting                            205        1700
+          190 Contracting                                      1700
+           70 Public Relations                      100        1700
+
+12 rows selected.
+
+HR1> SELECT employee_id, last_name FROM employees;
+
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------
+        174 Abel
+        142 Davies
+        102 De Haan
+        115 Dean
+        104 Ernst
+        202 Fay
+        206 Gietz
+        178 Grant
+        201 Hartstein
+        205 Higgins
+        103 Hunold
+        100 King
+        101 Kochhar
+        107 Lorentz
+        143 Matos
+        124 Mourgos
+        113 Popp
+        141 Rajs
+        114 Raphealy
+        176 Taylor
+        144 Vargas
+        200 Whalen
+        149 Zlotkey
+
+23 rows selected.
+
+HR1> desc sales_reps
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(6)
+ NAME                                      NOT NULL VARCHAR2(25)
+ SALARY                                             NUMBER(8,2)
+ COMM                                               NUMBER(2,2)
+
+HR1> INSERT INTO sales_reps
+  2  SELECT employee_id, last_name, salary, commission_pct
+  3  FROM employees
+  4  WHERE job_id LIKE '%REP%';
+
+6 rows created.
+
+HR1> SELECT * FROM sales_reps;
+
+        ID NAME                          SALARY       COMM
+---------- ------------------------- ---------- ----------
+       202 Fay                             6000
+       114 Raphealy                       11000         .2
+       115 Dean                           11000         .2
+       174 Abel                           11000         .3
+       176 Taylor                          8600         .2
+       178 Grant                           7000        .15
+
+6 rows selected.
+
+HR1> spool off

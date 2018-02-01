@@ -1,0 +1,488 @@
+HR2> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shipping                              124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+8 rows selected.
+
+HR2> INSERT INTO departments(department_id, department_name)
+  2  VALUES(30,'Purchasing');
+
+1 row created.
+
+HR2> INSERT INTO departments
+  2  VALUES(100,'Finance',null, null);
+
+1 row created.
+
+HR2> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           30 Purchasing                                                        
+          100 Finance                                                           
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shipping                              124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+10 rows selected.
+
+HR2> commit;
+
+Commit complete.
+
+HR2> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           30 Purchasing                                                        
+          100 Finance                                                           
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shipping                              124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+10 rows selected.
+
+HR2> INSERT INTO employees
+  2  VALUES(114,'Den','Raphealy',DRAPHEAL','515.123.6789',
+  3  TO_DATE('99/03/02','rr/mm/dd'), 'SA_REP', 11000,0.2, 100, 60);
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO employees
+  2  VALUES(114,'Den','Raphealy','DRAPHEAL','515.123.6789',
+  3* TO_DATE('99/03/02','rr/mm/dd'), 'SA_REP', 11000,0.2, 100, 60)
+HR2> /
+
+1 row created.
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO employees
+  2  VALUES(115,'James','Dean','JDEAN','515.123.6789',
+  3* TO_DATE('99/03/02','yy/mm/dd'), 'SA_REP', 11000,0.2, 100, 60)
+HR2> /
+
+1 row created.
+
+HR2> SELECT employees_id, last_name, hire_date
+  2  FROM employes;
+FROM employes
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, hire_date
+  2* FROM employes
+HR2> /
+FROM employes
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, hire_date
+  2* FROM employees
+HR2> /
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ---------                                 
+        200 Whalen                    17-SEP-87                                 
+        201 Hartstein                 17-FEB-96                                 
+        202 Fay                       17-AUG-97                                 
+        205 Higgins                   07-JUN-94                                 
+        206 Gietz                     07-JUN-94                                 
+        114 Raphealy                  02-MAR-99                                 
+        115 Dean                      02-MAR-99                                 
+        100 King                      17-JUN-87                                 
+        101 Kochhar                   21-SEP-89                                 
+        102 De Haan                   13-JAN-93                                 
+        103 Hunold                    03-JAN-90                                 
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ---------                                 
+        104 Ernst                     21-MAY-91                                 
+        107 Lorentz                   07-FEB-99                                 
+        124 Mourgos                   16-NOV-99                                 
+        141 Rajs                      17-OCT-95                                 
+        142 Davies                    29-JAN-97                                 
+        143 Matos                     15-MAR-98                                 
+        144 Vargas                    09-JUL-98                                 
+        149 Zlotkey                   29-JAN-00                                 
+        174 Abel                      11-MAY-96                                 
+        176 Taylor                    24-MAR-98                                 
+        178 Grant                     24-MAY-99                                 
+
+22 rows selected.
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, hire_date
+  2* FROM employees
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, TO_CHAR(hire_date)
+  2* FROM employees
+HR2> /
+
+EMPLOYEE_ID LAST_NAME                 TO_CHAR(HIRE_DATE)                        
+----------- ------------------------- ------------------                        
+        200 Whalen                    17-SEP-87                                 
+        201 Hartstein                 17-FEB-96                                 
+        202 Fay                       17-AUG-97                                 
+        205 Higgins                   07-JUN-94                                 
+        206 Gietz                     07-JUN-94                                 
+        114 Raphealy                  02-MAR-99                                 
+        115 Dean                      02-MAR-99                                 
+        100 King                      17-JUN-87                                 
+        101 Kochhar                   21-SEP-89                                 
+        102 De Haan                   13-JAN-93                                 
+        103 Hunold                    03-JAN-90                                 
+
+EMPLOYEE_ID LAST_NAME                 TO_CHAR(HIRE_DATE)                        
+----------- ------------------------- ------------------                        
+        104 Ernst                     21-MAY-91                                 
+        107 Lorentz                   07-FEB-99                                 
+        124 Mourgos                   16-NOV-99                                 
+        141 Rajs                      17-OCT-95                                 
+        142 Davies                    29-JAN-97                                 
+        143 Matos                     15-MAR-98                                 
+        144 Vargas                    09-JUL-98                                 
+        149 Zlotkey                   29-JAN-00                                 
+        174 Abel                      11-MAY-96                                 
+        176 Taylor                    24-MAR-98                                 
+        178 Grant                     24-MAY-99                                 
+
+22 rows selected.
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, TO_CHAR(hire_date, yyyy)
+  2* FROM employees
+HR2> /
+SELECT employee_id, last_name, TO_CHAR(hire_date, yyyy)
+                                                  *
+ERROR at line 1:
+ORA-00904: "YYYY": invalid identifier 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, TO_CHAR(hire_date,'yyyy/mm/dd') hire_date
+  2* FROM employees
+HR2> /
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        200 Whalen                    1987/09/17                                
+        201 Hartstein                 1996/02/17                                
+        202 Fay                       1997/08/17                                
+        205 Higgins                   1994/06/07                                
+        206 Gietz                     1994/06/07                                
+        114 Raphealy                  1999/03/02                                
+        115 Dean                      2099/03/02                                
+        100 King                      1987/06/17                                
+        101 Kochhar                   1989/09/21                                
+        102 De Haan                   1993/01/13                                
+        103 Hunold                    1990/01/03                                
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        104 Ernst                     1991/05/21                                
+        107 Lorentz                   1999/02/07                                
+        124 Mourgos                   1999/11/16                                
+        141 Rajs                      1995/10/17                                
+        142 Davies                    1997/01/29                                
+        143 Matos                     1998/03/15                                
+        144 Vargas                    1998/07/09                                
+        149 Zlotkey                   2000/01/29                                
+        174 Abel                      1996/05/11                                
+        176 Taylor                    1998/03/24                                
+        178 Grant                     1999/05/24                                
+
+22 rows selected.
+
+HR2> INSERT INTO departments(department_id, department_name, location_id)
+  2  VALUES(&depno,INITCAP('deptname'),&locid);
+Enter value for depno: 40
+Enter value for locid: human resource
+old   2: VALUES(&depno,INITCAP('deptname'),&locid)
+new   2: VALUES(40,INITCAP('deptname'),human resource)
+VALUES(40,INITCAP('deptname'),human resource)
+                                    *
+ERROR at line 2:
+ORA-00917: missing comma 
+
+
+HR2> /
+Enter value for depno: 40
+Enter value for locid: 2500
+old   2: VALUES(&depno,INITCAP('deptname'),&locid)
+new   2: VALUES(40,INITCAP('deptname'),2500)
+
+1 row created.
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO departments(department_id, department_name, location_id)
+  2* VALUES(&depno,INITCAP('&deptname'),&locid)
+HR2> /
+Enter value for depno: 40
+Enter value for deptname: human resource
+Enter value for locid: 2500
+old   2: VALUES(&depno,INITCAP('&deptname'),&locid)
+new   2: VALUES(40,INITCAP('human resource'),2500)
+INSERT INTO departments(department_id, department_name, location_id)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (HR.DEPT_ID_PK) violated 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  INSERT INTO departments(department_id, department_name, location_id)
+  2* VALUES(&depno,INITCAP('&deptname'),&locid)
+HR2> /
+Enter value for depno: 40
+Enter value for deptname: human resopurce
+Enter value for locid: 2500
+old   2: VALUES(&depno,INITCAP('&deptname'),&locid)
+new   2: VALUES(40,INITCAP('human resopurce'),2500)
+INSERT INTO departments(department_id, department_name, location_id)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (HR.DEPT_ID_PK) violated 
+
+
+HR2> SELECT * FROM departments
+  2  ;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           30 Purchasing                                                        
+          100 Finance                                                           
+           40 Deptname                                         2500             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shipping                              124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+11 rows selected.
+
+HR2> SELECT employee_id, last_name, TO_CHAR(hire_date,'yyyy/mm/dd') hire_date
+  2  FROM employees;
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        200 Whalen                    1987/09/17                                
+        201 Hartstein                 1996/02/17                                
+        202 Fay                       1997/08/17                                
+        205 Higgins                   1994/06/07                                
+        206 Gietz                     1994/06/07                                
+        114 Raphealy                  1999/03/02                                
+        115 Dean                      2099/03/02                                
+        100 King                      1987/06/17                                
+        101 Kochhar                   1989/09/21                                
+        102 De Haan                   1993/01/13                                
+        103 Hunold                    1990/01/03                                
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        104 Ernst                     1991/05/21                                
+        107 Lorentz                   1999/02/07                                
+        124 Mourgos                   1999/11/16                                
+        141 Rajs                      1995/10/17                                
+        142 Davies                    1997/01/29                                
+        143 Matos                     1998/03/15                                
+        144 Vargas                    1998/07/09                                
+        149 Zlotkey                   2000/01/29                                
+        174 Abel                      1996/05/11                                
+        176 Taylor                    1998/03/24                                
+        178 Grant                     1999/05/24                                
+
+22 rows selected.
+
+HR2> 
+HR2> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, last_name, TO_CHAR(hire_date,'yyyy/mm/dd') hire_date
+  2* FROM employees
+HR2> 
+HR2> /
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        200 Whalen                    1987/09/17                                
+        201 Hartstein                 1996/02/17                                
+        202 Fay                       1997/08/17                                
+        205 Higgins                   1994/06/07                                
+        206 Gietz                     1994/06/07                                
+        114 Raphealy                  1999/03/02                                
+        115 Dean                      2099/03/02                                
+        100 King                      1987/06/17                                
+        101 Kochhar                   1989/09/21                                
+        102 De Haan                   1993/01/13                                
+        103 Hunold                    1990/01/03                                
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        104 Ernst                     1991/05/21                                
+        113 Popp                      2018/01/25                                
+        107 Lorentz                   1999/02/07                                
+        124 Mourgos                   1999/11/16                                
+        141 Rajs                      1995/10/17                                
+        142 Davies                    1997/01/29                                
+        143 Matos                     1998/03/15                                
+        144 Vargas                    1998/07/09                                
+        149 Zlotkey                   2000/01/29                                
+        174 Abel                      1996/05/11                                
+        176 Taylor                    1998/03/24                                
+
+EMPLOYEE_ID LAST_NAME                 HIRE_DATE                                 
+----------- ------------------------- ----------                                
+        178 Grant                     1999/05/24                                
+
+23 rows selected.
+
+HR2> SELECT * FROM departments;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           30 Purchasing                                                        
+          100 Finance                                                           
+           40 Deptname                                         2500             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shipping                              124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           70 Public Relations                      100        1700             
+
+12 rows selected.
+
+HR2> CREATE TABLE sales_reps
+  2  AS
+  3  SELECT employee_id id, last_naem name, salary, commission_pct comm
+  4  FROM employees
+  5  WHERE 1=2;
+SELECT employee_id id, last_naem name, salary, commission_pct comm
+                       *
+ERROR at line 3:
+ORA-00904: "LAST_NAEM": invalid identifier 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  CREATE TABLE sales_reps
+  2  AS
+  3  SELECT employee_id id, last_name name, salary, commission_pct comm
+  4  FROM employees
+  5* WHERE 1=2
+HR2> /
+
+Table created.
+
+HR2> desc sales_reps
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(6)
+ NAME                                      NOT NULL VARCHAR2(25)
+ SALARY                                             NUMBER(8,2)
+ COMM                                               NUMBER(2,2)
+
+HR2> SELECT * FROM sales_reps;
+
+no rows selected
+
+HR2> SELECT * FROM sales_reps;
+
+no rows selected
+
+HR2> /
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+
+6 rows selected.
+
+HR2> /
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+
+6 rows selected.
+
+HR2> /
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+
+6 rows selected.
+
+HR2> spool off

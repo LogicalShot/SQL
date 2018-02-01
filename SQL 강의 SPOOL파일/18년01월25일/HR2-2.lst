@@ -1,0 +1,365 @@
+HR2> SELECT employee_id, department_id FROM employees;
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        200            10                                                       
+        201            20                                                       
+        202            20                                                       
+        205           110                                                       
+        206           110                                                       
+        114            60                                                       
+        115            60                                                       
+        100            90                                                       
+        101            90                                                       
+        102            90                                                       
+        103            60                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        104            60                                                       
+        113           110                                                       
+        107            60                                                       
+        124            50                                                       
+        141            50                                                       
+        142            50                                                       
+        143            50                                                       
+        144            50                                                       
+        149            80                                                       
+        174            80                                                       
+        176            80                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        178                                                                     
+
+23 rows selected.
+
+HR2> SELECT employee_id, salary, department_id FROM employees;
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        200       4400            10                                            
+        201      13000            20                                            
+        202       6000            20                                            
+        205      12000           110                                            
+        206       8300           110                                            
+        114      11000            60                                            
+        115      11000            60                                            
+        100      24000            90                                            
+        101      17000            90                                            
+        102      17000            90                                            
+        103       9000            60                                            
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        104       6000            60                                            
+        113       6900           110                                            
+        107       4200            60                                            
+        124       5800            50                                            
+        141       3500            50                                            
+        142       3100            50                                            
+        143       2600            50                                            
+        144       2500            50                                            
+        149      10500            80                                            
+        174      11000            80                                            
+        176       8600            80                                            
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        178       7000                                                          
+
+23 rows selected.
+
+HR2> UPDATE employees
+  2  SET salary = salary*1.1
+  3  WHERE employee_id = 202;
+
+1 row updated.
+
+HR2> SELECT employee_id, salary, department_id FROM employees;
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        200       4400            10                                            
+        201      13000            20                                            
+        202       6600            20                                            
+        205      12000           110                                            
+        206       8300           110                                            
+        114      11000            60                                            
+        115      11000            60                                            
+        100      24000            90                                            
+        101      17000            90                                            
+        102      17000            90                                            
+        103       9000            60                                            
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        104       6000            60                                            
+        113       6900           110                                            
+        107       4200            60                                            
+        124       5800            50                                            
+        141       3500            50                                            
+        142       3100            50                                            
+        143       2600            50                                            
+        144       2500            50                                            
+        149      10500            80                                            
+        174      11000            80                                            
+        176       8600            80                                            
+
+EMPLOYEE_ID     SALARY DEPARTMENT_ID                                            
+----------- ---------- -------------                                            
+        178       7000                                                          
+
+23 rows selected.
+
+HR2> UPDATE employees
+  2  SET salary = salary*1.1
+  3  WHERE employee_id = 201;
+
+1 row updated.
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1  UPDATE employees
+  2  SET salary = salary*1.1
+  3* WHERE employee_id = 301
+HR2> /
+
+0 rows updated.
+
+HR2> UPDATE employees
+  2  SET job_id = (SELECT job_id
+  3                FROM employees
+  4                WHERE employee_id = 205),
+  5      salary = (SELECT salary
+  6                FROM employees
+  7                WHERE employee_id = 205)
+  8  WHERE employee_id = 113;
+
+1 row updated.
+
+HR2> SELECT employee_id, salary from employees;
+
+EMPLOYEE_ID     SALARY                                                          
+----------- ----------                                                          
+        200       4400                                                          
+        201      14300                                                          
+        202       6600                                                          
+        205      12000                                                          
+        206       8300                                                          
+        114      11000                                                          
+        115      11000                                                          
+        100      24000                                                          
+        101      17000                                                          
+        102      17000                                                          
+        103       9000                                                          
+
+EMPLOYEE_ID     SALARY                                                          
+----------- ----------                                                          
+        104       6000                                                          
+        113      12000                                                          
+        107       4200                                                          
+        124       5800                                                          
+        141       3500                                                          
+        142       3100                                                          
+        143       2600                                                          
+        144       2500                                                          
+        149      10500                                                          
+        174      11000                                                          
+        176       8600                                                          
+
+EMPLOYEE_ID     SALARY                                                          
+----------- ----------                                                          
+        178       7000                                                          
+
+23 rows selected.
+
+HR2> SELECT job_id, salary FROM employees;
+
+JOB_ID         SALARY                                                           
+---------- ----------                                                           
+AD_ASST          4400                                                           
+MK_MAN          14300                                                           
+MK_REP           6600                                                           
+AC_MGR          12000                                                           
+AC_ACCOUNT       8300                                                           
+SA_REP          11000                                                           
+SA_REP          11000                                                           
+AD_PRES         24000                                                           
+AD_VP           17000                                                           
+AD_VP           17000                                                           
+IT_PROG          9000                                                           
+
+JOB_ID         SALARY                                                           
+---------- ----------                                                           
+IT_PROG          6000                                                           
+AC_MGR          12000                                                           
+IT_PROG          4200                                                           
+ST_MAN           5800                                                           
+ST_CLERK         3500                                                           
+ST_CLERK         3100                                                           
+ST_CLERK         2600                                                           
+ST_CLERK         2500                                                           
+SA_MAN          10500                                                           
+SA_REP          11000                                                           
+SA_REP           8600                                                           
+
+JOB_ID         SALARY                                                           
+---------- ----------                                                           
+SA_REP           7000                                                           
+
+23 rows selected.
+
+HR2> commit
+  2  ;
+
+Commit complete.
+
+HR2> SELECT employee_id, department_id FROM employees;
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        200            10                                                       
+        201            40                                                       
+        202            20                                                       
+        205           110                                                       
+        206           110                                                       
+        114            60                                                       
+        115            60                                                       
+        100            90                                                       
+        101            90                                                       
+        102            90                                                       
+        103            60                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        104            60                                                       
+        113           110                                                       
+        107            60                                                       
+        124            50                                                       
+        141            50                                                       
+        142            50                                                       
+        143            50                                                       
+        144            50                                                       
+        149            80                                                       
+        174            80                                                       
+        176            80                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        178                                                                     
+
+23 rows selected.
+
+HR2> UPDATE employees
+  2  SET department_id = (SELECT department_id FROM departments
+  3                       WHERE department_name = 'Marketing')
+  4  WHERE employee_id = 141;
+
+1 row updated.
+
+HR2> SELECT employee_id, department_id FROM departments;
+SELECT employee_id, department_id FROM departments
+       *
+ERROR at line 1:
+ORA-00904: "EMPLOYEE_ID": invalid identifier 
+
+
+HR2> ed
+Wrote file afiedt.buf
+
+  1* SELECT employee_id, department_id FROM employees
+HR2> /
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        200            10                                                       
+        201            40                                                       
+        202            20                                                       
+        205           110                                                       
+        206           110                                                       
+        114            60                                                       
+        115            60                                                       
+        100            90                                                       
+        101            90                                                       
+        102            90                                                       
+        103            60                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        104            60                                                       
+        113           110                                                       
+        107            60                                                       
+        124            50                                                       
+        141            20                                                       
+        142            50                                                       
+        143            50                                                       
+        144            50                                                       
+        149            80                                                       
+        174            80                                                       
+        176            80                                                       
+
+EMPLOYEE_ID DEPARTMENT_ID                                                       
+----------- -------------                                                       
+        178                                                                     
+
+23 rows selected.
+
+HR2> select * from sales_reps;
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+
+6 rows selected.
+
+HR2> delete from sales_reps;
+
+6 rows deleted.
+
+HR2> select * from sales_reps;
+
+no rows selected
+
+HR2> rollback;
+
+Rollback complete.
+
+HR2> select * from sales_reps;
+
+        ID NAME                          SALARY       COMM                      
+---------- ------------------------- ---------- ----------                      
+       202 Fay                             6000                                 
+       114 Raphealy                       11000         .2                      
+       115 Dean                           11000         .2                      
+       174 Abel                           11000         .3                      
+       176 Taylor                          8600         .2                      
+       178 Grant                           7000        .15                      
+
+6 rows selected.
+
+HR2> truncate table sales_reps;
+
+Table truncated.
+
+HR2> selet * from sales_reps;
+SP2-0734: unknown command beginning "selet * fr..." - rest of line ignored.
+HR2> select * from sales_reps;
+
+no rows selected
+
+HR2> rollback;
+
+Rollback complete.
+
+HR2> select * from sales_reps;
+
+no rows selected
+
+HR2> spool off

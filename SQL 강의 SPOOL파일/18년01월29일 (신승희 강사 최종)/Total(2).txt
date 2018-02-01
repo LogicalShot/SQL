@@ -1,0 +1,221 @@
+HR@orcl> select employee_id, from_tz(hire_date, 'Asia/Seoul') from emp13;
+
+EMPLOYEE_ID FROM_TZ(HIRE_DATE,'ASIA/SEOUL')
+----------- ---------------------------------------------------------------------------
+        149 29-JAN-00 12.00.00 AM ASIA/SEOUL
+        174 11-MAY-96 12.00.00 AM ASIA/SEOUL
+        176 24-MAY-98 12.00.00 AM ASIA/SEOUL
+        144 09-JUL-98 12.00.00 AM ASIA/SEOUL
+        143 15-MAR-98 12.00.00 AM ASIA/SEOUL
+        202 17-AUG-97 12.00.00 AM ASIA/SEOUL
+        141 17-OCT-95 12.00.00 AM ASIA/SEOUL
+        103 03-JAN-90 12.00.00 AM ASIA/SEOUL
+        201 17-FEB-96 12.00.00 AM ASIA/SEOUL
+        101 21-SEP-89 12.00.00 AM ASIA/SEOUL
+        104 21-MAY-91 12.00.00 AM ASIA/SEOUL
+
+EMPLOYEE_ID FROM_TZ(HIRE_DATE,'ASIA/SEOUL')
+----------- ---------------------------------------------------------------------------
+        200 17-SEP-87 12.00.00 AM ASIA/SEOUL
+        113 25-JAN-18 10.37.35 AM ASIA/SEOUL
+        102 13-JAN-93 12.00.00 AM ASIA/SEOUL
+        107 07-FEB-99 12.00.00 AM ASIA/SEOUL
+        100 17-JUN-87 12.00.00 AM ASIA/SEOUL
+        142 29-JAN-97 12.00.00 AM ASIA/SEOUL
+        206 07-JUN-94 12.00.00 AM ASIA/SEOUL
+        114 02-MAR-99 12.00.00 AM ASIA/SEOUL
+        124 16-NOV-99 12.00.00 AM ASIA/SEOUL
+        205 07-JUN-94 12.00.00 AM ASIA/SEOUL
+        115 02-MAR-99 12.00.00 AM ASIA/SEOUL
+
+EMPLOYEE_ID FROM_TZ(HIRE_DATE,'ASIA/SEOUL')
+----------- ---------------------------------------------------------------------------
+        178 24-MAY-99 12.00.00 AM ASIA/SEOUL
+
+23 rows selected.
+
+HR@orcl> SELECT employee_id, hire_date, hire_date_to_yminterval ('01-06')
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1* SELECT employee_id, hire_date, hire_date +to_yminterval ('01-06')
+HR@orcl> /
+SELECT employee_id, hire_date, hire_date +to_yminterval ('01-06')
+                                                                *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, hire_date, hire_date +to_yminterval('01-06')
+  2* from employees
+HR@orcl> /
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        200 17-SEP-87                 17-MAR-89
+        201 17-FEB-96                 17-AUG-97
+        202 17-AUG-97                 17-FEB-99
+        205 07-JUN-94                 07-DEC-95
+        206 07-JUN-94                 07-DEC-95
+        114 02-MAR-99                 02-SEP-00
+        115 02-MAR-99                 02-SEP-00
+        100 17-JUN-87                 17-DEC-88
+        101 21-SEP-89                 21-MAR-91
+        102 13-JAN-93                 13-JUL-94
+        103 03-JAN-90                 03-JUL-91
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        104 21-MAY-91                 21-NOV-92
+        113 25-JAN-18                 25-JUL-19
+        107 07-FEB-99                 07-AUG-00
+        124 16-NOV-99                 16-MAY-01
+        141 17-OCT-95                 17-APR-97
+        142 29-JAN-97                 29-JUL-98
+        143 15-MAR-98                 15-SEP-99
+        144 09-JUL-98                 09-JAN-00
+        149 29-JAN-00                 29-JUL-01
+        174 11-MAY-96                 11-NOV-97
+        176 24-MAY-98                 24-NOV-99
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        178 24-MAY-99                 24-NOV-00
+
+23 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, hire_date, hire_date +to_yminterval('01-06') Hire_date_yminterval
+  2* from employees
+HR@orcl> /
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        200 17-SEP-87                 17-MAR-89
+        201 17-FEB-96                 17-AUG-97
+        202 17-AUG-97                 17-FEB-99
+        205 07-JUN-94                 07-DEC-95
+        206 07-JUN-94                 07-DEC-95
+        114 02-MAR-99                 02-SEP-00
+        115 02-MAR-99                 02-SEP-00
+        100 17-JUN-87                 17-DEC-88
+        101 21-SEP-89                 21-MAR-91
+        102 13-JAN-93                 13-JUL-94
+        103 03-JAN-90                 03-JUL-91
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        104 21-MAY-91                 21-NOV-92
+        113 25-JAN-18                 25-JUL-19
+        107 07-FEB-99                 07-AUG-00
+        124 16-NOV-99                 16-MAY-01
+        141 17-OCT-95                 17-APR-97
+        142 29-JAN-97                 29-JUL-98
+        143 15-MAR-98                 15-SEP-99
+        144 09-JUL-98                 09-JAN-00
+        149 29-JAN-00                 29-JUL-01
+        174 11-MAY-96                 11-NOV-97
+        176 24-MAY-98                 24-NOV-99
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        178 24-MAY-99                 24-NOV-00
+
+23 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT employee_id, hire_date, hire_date +to_yminterval('01-06') AS Hire_date_yminterval
+  2* from employees
+HR@orcl> /
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        200 17-SEP-87                 17-MAR-89
+        201 17-FEB-96                 17-AUG-97
+        202 17-AUG-97                 17-FEB-99
+        205 07-JUN-94                 07-DEC-95
+        206 07-JUN-94                 07-DEC-95
+        114 02-MAR-99                 02-SEP-00
+        115 02-MAR-99                 02-SEP-00
+        100 17-JUN-87                 17-DEC-88
+        101 21-SEP-89                 21-MAR-91
+        102 13-JAN-93                 13-JUL-94
+        103 03-JAN-90                 03-JUL-91
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        104 21-MAY-91                 21-NOV-92
+        113 25-JAN-18                 25-JUL-19
+        107 07-FEB-99                 07-AUG-00
+        124 16-NOV-99                 16-MAY-01
+        141 17-OCT-95                 17-APR-97
+        142 29-JAN-97                 29-JUL-98
+        143 15-MAR-98                 15-SEP-99
+        144 09-JUL-98                 09-JAN-00
+        149 29-JAN-00                 29-JUL-01
+        174 11-MAY-96                 11-NOV-97
+        176 24-MAY-98                 24-NOV-99
+
+EMPLOYEE_ID HIRE_DATE                 HIRE_DATE
+----------- ------------------------- ---------
+        178 24-MAY-99                 24-NOV-00
+
+23 rows selected.
+
+HR@orcl> SELECT last_name,
+  2  TO_CHAR(hire_date, 'mm-dd-yy:hh:mi:ss') hire_date,
+  3   TO_CHAR(hire_date +
+  4    TO_DSINTERVAL('100 10:00:00'),
+  5     'mm-dd-yy:hh:mi:ss') hiredate2 
+  6  FROM employees;
+
+LAST_NAME                 HIRE_DATE                 HIREDATE2
+------------------------- ------------------------- -----------------
+Whalen                    09-17-87:12:00:00         12-26-87:10:00:00
+Hartstein                 02-17-96:12:00:00         05-27-96:10:00:00
+Fay                       08-17-97:12:00:00         11-25-97:10:00:00
+Higgins                   06-07-94:12:00:00         09-15-94:10:00:00
+Gietz                     06-07-94:12:00:00         09-15-94:10:00:00
+Raphealy                  03-02-99:12:00:00         06-10-99:10:00:00
+Dean                      03-02-99:12:00:00         06-10-99:10:00:00
+King                      06-17-87:12:00:00         09-25-87:10:00:00
+Kochhar                   09-21-89:12:00:00         12-30-89:10:00:00
+De Haan                   01-13-93:12:00:00         04-23-93:10:00:00
+Hunold                    01-03-90:12:00:00         04-13-90:10:00:00
+
+LAST_NAME                 HIRE_DATE                 HIREDATE2
+------------------------- ------------------------- -----------------
+Ernst                     05-21-91:12:00:00         08-29-91:10:00:00
+Popp                      01-25-18:10:37:35         05-05-18:08:37:35
+Lorentz                   02-07-99:12:00:00         05-18-99:10:00:00
+Mourgos                   11-16-99:12:00:00         02-24-00:10:00:00
+Rajs                      10-17-95:12:00:00         01-25-96:10:00:00
+Davies                    01-29-97:12:00:00         05-09-97:10:00:00
+Matos                     03-15-98:12:00:00         06-23-98:10:00:00
+Vargas                    07-09-98:12:00:00         10-17-98:10:00:00
+Zlotkey                   01-29-00:12:00:00         05-08-00:10:00:00
+Abel                      05-11-96:12:00:00         08-19-96:10:00:00
+Taylor                    05-24-98:12:00:00         09-01-98:10:00:00
+
+LAST_NAME                 HIRE_DATE                 HIREDATE2
+------------------------- ------------------------- -----------------
+Grant                     05-24-99:12:00:00         09-01-99:10:00:00
+
+23 rows selected.
+
+HR@orcl> 
+
